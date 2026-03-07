@@ -36,7 +36,7 @@ import qt.gui.region;
 import qt.gui.screen;
 import qt.gui.touchdevice;
 import qt.gui.vector2d;
-import qt.gui.windowdefs;
+import qt.gui.window;
 import qt.helpers;
 version (QT_NO_INPUTMETHOD) {} else
     import qt.core.variant;
@@ -1148,7 +1148,7 @@ alias InfoFlags = QFlags!(InfoFlag);/+ #endif +/
                              ref const(QList!(TouchPoint)) touchPoints = globalInitVar!(QList!(TouchPoint)));
     ~this();
 
-    pragma(inline, true) final QWindow* window() const { return cast(QWindow*)_window; }
+    pragma(inline, true) final QWindow window() const { return cast(QWindow)_window; }
     pragma(inline, true) final QObject target() const { return cast(QObject)_target; }
 /+ #if QT_DEPRECATED_SINCE(5, 0)
     QT_DEPRECATED inline QTouchEvent::DeviceType deviceType() const { return static_cast<DeviceType>(int(_device->type())); }
@@ -1158,14 +1158,14 @@ alias InfoFlags = QFlags!(InfoFlag);/+ #endif +/
     pragma(inline, true) final QTouchDevice* device() const { return cast(QTouchDevice*)_device; }
 
     // internal
-    pragma(inline, true) final void setWindow(QWindow* awindow) { _window = awindow; }
+    pragma(inline, true) final void setWindow(QWindow awindow) { _window = awindow; }
     pragma(inline, true) final void setTarget(QObject atarget) { _target = atarget; }
     pragma(inline, true) final void setTouchPointStates(/+ Qt:: +/qt.core.namespace.TouchPointStates aTouchPointStates) { _touchPointStates = aTouchPointStates; }
     pragma(inline, true) final void setTouchPoints(ref const(QList!(QTouchEvent.TouchPoint)) atouchPoints) { _touchPoints = *cast(QList!TouchPoint*)&atouchPoints; }
     pragma(inline, true) final void setDevice(QTouchDevice* adevice) { _device = adevice; }
 
 protected:
-    QWindow* _window;
+    QWindow _window;
     QObject _target;
     QTouchDevice* _device;
     /+ Qt:: +/qt.core.namespace.TouchPointStates _touchPointStates;

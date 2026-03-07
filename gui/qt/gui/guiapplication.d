@@ -28,6 +28,7 @@ import qt.gui.inputmethod;
 import qt.gui.palette;
 import qt.gui.screen;
 import qt.gui.stylehints;
+import qt.gui.window;
 import qt.gui.windowdefs;
 import qt.helpers;
 version (QT_NO_CLIPBOARD) {} else
@@ -78,16 +79,16 @@ public:
 
     static QWindowList allWindows();
     static QWindowList topLevelWindows();
-    static QWindow* topLevelAt(ref const(QPoint) pos);
+    static QWindow topLevelAt(ref const(QPoint) pos);
 
     static void setWindowIcon(ref const(QIcon) icon);
     static QIcon windowIcon();
 
     static QString platformName();
 
-    static QWindow* modalWindow();
+    static QWindow modalWindow();
 
-    static QWindow* focusWindow();
+    static QWindow focusWindow();
     static QObject focusObject();
 
     static QScreen primaryScreen();
@@ -168,7 +169,7 @@ public:
     @QSignal final void primaryScreenChanged(QScreen screen);
     @QSignal final void lastWindowClosed();
     @QSignal final void focusObjectChanged(QObject focusObject);
-    @QSignal final void focusWindowChanged(QWindow* focusWindow);
+    @QSignal final void focusWindowChanged(QWindow focusWindow);
     @QSignal final void applicationStateChanged(/+ Qt:: +/qt.core.namespace.ApplicationState state);
     @QSignal final void layoutDirectionChanged(/+ Qt:: +/qt.core.namespace.LayoutDirection direction);
     version (QT_NO_SESSIONMANAGER) {} else

@@ -60,6 +60,7 @@ The following examples show how to use DQt:
 * examples/examplewidgets: Example using many widgets from Qt and showing them
  in a window with different tabs. It uses UI files created with Qt Designer for
  the layout, which are imported at compile time.
+* examples/exampleguiwindow: Example using low-level QWindow directly.
 * examples/examplebrowser: Example using QtWebEngine to show a simple web browser.
 * examples/exampleqml: Example for using QML.
 
@@ -72,6 +73,7 @@ You can build and run the example programs using dub:
 ```
 dub run :helloworld
 dub run :examplewidgets
+dub run :exampleguiwindow
 dub run :examplebrowser
 dub run :exampleqml
 ```
@@ -96,6 +98,7 @@ You can build and run the example programs using dub:
 @set PATH=C:\Qt\5.15.2\msvc2019_64\bin;%PATH%
 dub run --compiler=dmd --arch=x86_64 :helloworld --build-mode=allAtOnce
 dub run --compiler=dmd --arch=x86_64 :examplewidgets --build-mode=allAtOnce
+dub run --compiler=dmd --arch=x86_64 :exampleguiwindow --build-mode=allAtOnce
 dub run --compiler=dmd --arch=x86_64 :examplebrowser --build-mode=allAtOnce
 dub run --compiler=dmd --arch=x86_64 :exampleqml --build-mode=allAtOnce
 ```
@@ -117,6 +120,7 @@ You can build and run the example programs using dub:
 @set PATH=C:\Qt\5.15.2\msvc2019\bin;%PATH%
 dub run --compiler=dmd --arch=x86_mscoff :helloworld --build-mode=allAtOnce
 dub run --compiler=dmd --arch=x86_mscoff :examplewidgets --build-mode=allAtOnce
+dub run --compiler=dmd --arch=x86_mscoff :exampleguiwindow --build-mode=allAtOnce
 dub run --compiler=dmd --arch=x86_mscoff :exampleqml --build-mode=allAtOnce
 ```
 

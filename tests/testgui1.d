@@ -2,7 +2,98 @@
 module testgui1;
 
 import qt.config;
+import qt.core.coreevent;
+import qt.gui.backingstore;
+import qt.gui.event;
+import qt.gui.guiapplication;
+import qt.gui.window;
 import qt.helpers;
+
+QGuiApplication app;
+version (Android)
+{}
+else
+shared static this()
+{
+    import core.runtime;
+    import core.stdcpp.new_;
+
+    app = cpp_new!QGuiApplication(Runtime.cArgs.argc, Runtime.cArgs.argv);
+}
+
+class TestWindow : QWindow
+{
+    mixin(Q_OBJECT_D);
+public:
+    /+ explicit +/this()
+    {
+        import core.stdcpp.new_;
+
+        backingStore = cpp_new!QBackingStore(this);
+        resize(400, 400);
+    }
+    ~this()
+    {
+    }
+
+protected:
+    final void renderNow()
+    {
+        import qt.core.namespace;
+        import qt.core.rect;
+        import qt.gui.brush;
+        import qt.gui.color;
+        import qt.gui.paintdevice;
+        import qt.gui.painter;
+        import qt.gui.region;
+
+        if (!isExposed())
+            return;
+
+        auto rect = QRect(0, 0, width(), height());
+        backingStore.beginPaint(QRegion(rect));
+
+        QPaintDevice device = backingStore.paintDevice();
+        auto painter = QPainter(device);
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing);
+
+        painter.fillRect(QRectF(0, 0, width(), height()), QBrush(QColor(/+ Qt:: +/qt.core.namespace.GlobalColor.blue)));
+        painter.fillRect(QRectF(10, 10, 50, 50), QBrush(QColor(/+ Qt:: +/qt.core.namespace.GlobalColor.red)));
+
+        painter.end();
+        backingStore.endPaint();
+        backingStore.flush(QRegion(rect));
+
+        /+ emit +/ rendered();
+    }
+
+    extern(C++) override bool event(QEvent event)
+    {
+        if (event.type() == QEvent.Type.UpdateRequest)
+        {
+            renderNow();
+            return true;
+        }
+        return QWindow.event(event);
+    }
+
+    extern(C++) override void resizeEvent(QResizeEvent event)
+    {
+        backingStore.resize(event.size());
+    }
+
+    extern(C++) override void exposeEvent(QExposeEvent event)
+    {
+        if (isExposed())
+            renderNow();
+    }
+
+/+ signals +/public:
+    @QSignal final void rendered() {mixin(Q_SIGNAL_IMPL_D);}
+
+private:
+    QBackingStore* backingStore;
+}
 
 unittest
 {
@@ -98,4 +189,61 @@ unittest
     assert(url.toString().toConstWString == "https://dlang.org/"w);
     document.setBaseUrl(url);
     assert(document.baseUrl().toString().toConstWString == "https://dlang.org/"w);
+}
+
+unittest
+{
+    import qt.core.namespace;
+    import qt.core.rect;
+    import qt.gui.brush;
+    import qt.gui.color;
+    import qt.gui.image;
+    import qt.gui.painter;
+
+    auto image = QImage(100, 100, QImage.Format.Format_ARGB32_Premultiplied);
+    image.fill(/+ Qt:: +/qt.core.namespace.GlobalColor.transparent);
+
+    {
+        auto painter = QPainter(image.paintDevice);
+        painter.fillRect(QRect(0, 0, image.width(), image.height()), QBrush(QColor(/+ Qt:: +/qt.core.namespace.GlobalColor.blue)));
+        painter.fillRect(QRect(10, 10, 50, 50), QBrush(QColor(/+ Qt:: +/qt.core.namespace.GlobalColor.red)));
+    }
+
+    assert(image.pixelColor(5, 5) == QColor(/+ Qt:: +/qt.core.namespace.GlobalColor.blue));
+    assert(image.pixelColor(30, 30) == QColor(/+ Qt:: +/qt.core.namespace.GlobalColor.red));
+}
+
+version (Android)
+{}
+else
+unittest
+{
+    import qt.core.eventloop;
+    import qt.core.namespace;
+    import qt.core.object;
+    import qt.gui.color;
+    import qt.gui.image;
+    import qt.gui.paintdevice;
+    import qt.gui.region;
+
+    scope window = new TestWindow;
+    window.show();
+
+    scope eventLoop = new QEventLoop;
+    QObject.connect(window.signal!"rendered", eventLoop.slot!"quit", /+ Qt:: +/qt.core.namespace.ConnectionType.QueuedConnection);
+    eventLoop.exec();
+
+    QBackingStore* bs = window.backingStore;
+    assert(bs !is null);
+
+    bs.flush(QRegion(0, 0, window.width(), window.height()));
+
+    const(QPaintDevice) device = bs.paintDevice();
+    assert(device.devType() == QInternal.PaintDeviceFlags.Image);
+    const(QImage)* image = static_cast!(const(QImage)*)(device);
+    assert(image !is null);
+    assert(!image.isNull());
+
+    assert(image.pixelColor(5, 5) == QColor(/+ Qt:: +/qt.core.namespace.GlobalColor.blue));
+    assert(image.pixelColor(30, 30) == QColor(/+ Qt:: +/qt.core.namespace.GlobalColor.red));
 }

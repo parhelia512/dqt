@@ -28,6 +28,7 @@ import qt.core.rect;
 import qt.core.size;
 import qt.core.string;
 import qt.core.variant;
+import qt.gui.backingstore;
 import qt.gui.bitmap;
 import qt.gui.event;
 import qt.gui.font;
@@ -41,6 +42,7 @@ import qt.gui.palette;
 import qt.gui.pixmap;
 import qt.gui.region;
 import qt.gui.screen;
+import qt.gui.window;
 import qt.gui.windowdefs;
 import qt.helpers;
 import qt.widgets.layout;
@@ -63,8 +65,6 @@ alias QWidgetList = QList!(QWidget);
 
 
 extern(C++, class) struct QWSRegionManager;
-extern(C++, class) struct QBackingStore;
-extern(C++, class) struct QPlatformWindow;
 extern(C++, class) struct QGraphicsProxyWidget;
 extern(C++, class) struct QGraphicsEffect;
 extern(C++, class) struct QRasterWindowSurface;
@@ -747,10 +747,10 @@ public:
 
     final QBackingStore* backingStore() const;
 
-    final QWindow* windowHandle() const;
+    final QWindow windowHandle() const;
     final QScreen screen() const;
 
-    static QWidget createWindowContainer(QWindow* window, QWidget parent=null, /+ Qt:: +/qt.core.namespace.WindowFlags flags=/+ Qt:: +/qt.core.namespace.WindowFlags());
+    static QWidget createWindowContainer(QWindow window, QWidget parent=null, /+ Qt:: +/qt.core.namespace.WindowFlags flags=/+ Qt:: +/qt.core.namespace.WindowFlags());
 
     /+ friend class QDesktopScreenWidget; +/
 

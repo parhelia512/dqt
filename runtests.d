@@ -229,6 +229,8 @@ int main(string[] args)
             ["-Iexamples"], true);
     tests ~= Test(buildPath("examples", "examplewidgets", "main.d"), ["widgets"],
             ["-Iexamples", "-J" ~ buildPath("examples", "examplewidgets")], true);
+    tests ~= Test(buildPath("examples", "exampleguiwindow", "main.d"), ["gui"],
+            ["-Iexamples"], true);
     tests ~= Test(buildPath("examples", "exampleqml", "main.d"), ["quickcontrols2"],
             ["-Iexamples"], true);
     tests ~= Test(buildPath("examples", "examplebrowser", "main.d"), ["webenginewidgets"],

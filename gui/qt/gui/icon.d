@@ -24,7 +24,7 @@ import qt.core.typeinfo;
 import qt.core.variant;
 import qt.gui.painter;
 import qt.gui.pixmap;
-import qt.gui.windowdefs;
+import qt.gui.window;
 import qt.helpers;
 
 extern(C++, class) struct QIconPrivate;
@@ -65,10 +65,10 @@ public:
         { auto tmp = QSize(w, h); return pixmap(tmp, mode, state); }
     pragma(inline, true) QPixmap pixmap(int extent, Mode mode = Mode.Normal, State state = State.Off) const
         { auto tmp = QSize(extent, extent); return pixmap(tmp, mode, state); }
-    QPixmap pixmap(QWindow* window, ref const(QSize) size, Mode mode = Mode.Normal, State state = State.Off) const;
+    QPixmap pixmap(QWindow window, ref const(QSize) size, Mode mode = Mode.Normal, State state = State.Off) const;
 
     QSize actualSize(ref const(QSize) size, Mode mode = Mode.Normal, State state = State.Off) const;
-    QSize actualSize(QWindow* window, ref const(QSize) size, Mode mode = Mode.Normal, State state = State.Off) const;
+    QSize actualSize(QWindow window, ref const(QSize) size, Mode mode = Mode.Normal, State state = State.Off) const;
 
     QString name() const;
 
