@@ -24,7 +24,7 @@ import qt.core.typeinfo;
 import qt.core.variant;
 import qt.gui.painter;
 import qt.gui.pixmap;
-import qt.gui.windowdefs;
+import qt.gui.window;
 import qt.helpers;
 
 extern(C++, class) struct QIconPrivate;
@@ -69,13 +69,13 @@ public:
     QPixmap pixmap(ref const(QSize) size, qreal devicePixelRatio, Mode mode = Mode.Normal, State state = State.Off) const;
 /+ #if QT_DEPRECATED_SINCE(6, 0) +/
     /+ QT_DEPRECATED_VERSION_X_6_0("Use pixmap(size, devicePixelRatio) instead") +/
-        QPixmap pixmap(QWindow* window, ref const(QSize) size, Mode mode = Mode.Normal, State state = State.Off) const;
+        QPixmap pixmap(QWindow window, ref const(QSize) size, Mode mode = Mode.Normal, State state = State.Off) const;
 /+ #endif +/
 
     QSize actualSize(ref const(QSize) size, Mode mode = Mode.Normal, State state = State.Off) const;
 /+ #if QT_DEPRECATED_SINCE(6, 0) +/
     /+ QT_DEPRECATED_VERSION_X_6_0("Use actualSize(size) instead") +/
-        QSize actualSize(QWindow* window, ref const(QSize) size, Mode mode = Mode.Normal, State state = State.Off) const;
+        QSize actualSize(QWindow window, ref const(QSize) size, Mode mode = Mode.Normal, State state = State.Off) const;
 /+ #endif +/
 
     QString name() const;

@@ -159,6 +159,13 @@
 			"dependencies": {"dqt:widgets":"*"}
 		},
 		{
+			"name": "exampleguiwindow",
+			"targetType": "executable",
+			"sourcePaths": ["examples/exampleguiwindow"],
+			"importPaths": ["examples/exampleguiwindow"],
+			"dependencies": {"dqt:gui":"*"}
+		},
+		{
 			"name": "exampleqml",
 			"targetType": "executable",
 			"sourcePaths": ["examples/exampleqml"],

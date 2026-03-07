@@ -80,7 +80,7 @@ protected:
     {
         assert(false);
     }
-    final void initPainter(QPainter * painter) const
+    final void initPainter(QPainter* painter) const
     {
         assert(false);
     }

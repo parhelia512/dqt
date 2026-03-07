@@ -60,6 +60,7 @@ The following examples show how to use DQt:
 * examples/examplewidgets: Example using many widgets from Qt and showing them
  in a window with different tabs. It uses UI files created with Qt Designer for
  the layout, which are imported at compile time.
+* examples/exampleguiwindow: Example using low-level QWindow directly.
 * examples/examplebrowser: Example using QtWebEngine to show a simple web browser.
 * examples/exampleqml: Example for using QML.
 * examples/mediaplayer: Example for showing a video with QtMultimediaWidgets.
@@ -74,6 +75,7 @@ You can build and run the example programs using dub:
 ```
 dub run :helloworld
 dub run :examplewidgets
+dub run :exampleguiwindow
 dub run :examplebrowser
 dub run :exampleqml
 dub run :mediaplayer
@@ -98,6 +100,7 @@ You can build and run the example programs using dub:
 @set PATH=C:\Qt\6.4.2\msvc2019_64\bin;%PATH%
 dub run --compiler=dmd --arch=x86_64 :helloworld --build-mode=allAtOnce
 dub run --compiler=dmd --arch=x86_64 :examplewidgets --build-mode=allAtOnce
+dub run --compiler=dmd --arch=x86_64 :exampleguiwindow --build-mode=allAtOnce
 dub run --compiler=dmd --arch=x86_64 :examplebrowser --build-mode=allAtOnce
 dub run --compiler=dmd --arch=x86_64 :exampleqml --build-mode=allAtOnce
 dub run --compiler=dmd --arch=x86_64 :mediaplayer --build-mode=allAtOnce

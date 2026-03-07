@@ -15,17 +15,17 @@ extern(C++):
 import qt.config;
 import qt.core.global;
 import qt.core.list;
+import qt.gui.window;
 import qt.helpers;
 
 // Class forward definitions
 
-extern(C++, class) struct QWindow;
 version (QT_NO_CLIPBOARD)
 {
 extern(C++, class) struct QClipboard;
 }
 
-alias QWindowList = QList!(QWindow*);
+alias QWindowList = QList!(QWindow);
 
 
 // Window system dependent definitions

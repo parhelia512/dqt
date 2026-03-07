@@ -1054,6 +1054,11 @@ package string changeCppMangling(bool debugHere = false)(string changeFuncs,
     {
         returnType = declaration[attributesEnd .. parts[0].end];
         parts = parts[1 .. $];
+        while (declaration[parts[0].start .. parts[0].end] == "*")
+        {
+            returnType ~= declaration[parts[0].start .. parts[0].end];
+            parts = parts[1 .. $];
+        }
     }
     assert(parts.length >= 3, text(parts.length));
     string name = declaration[parts[0].start .. parts[0].end];

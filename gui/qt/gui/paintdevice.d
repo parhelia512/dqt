@@ -29,9 +29,9 @@ interface QPaintDeviceInterface
     /+ virtual +/ QPaintEngine paintEngine() const /+ = 0 +/;
 protected:
     /+ virtual +/ int metric(PaintDeviceMetric metric) const;
-    /+ virtual +/ void initPainter(QPainter * painter) const;
-    /+ virtual +/ QPaintDevice redirected(QPoint * offset) const;
-    /+ virtual +/ QPainter * sharedPainter() const;
+    /+ virtual +/ void initPainter(QPainter* painter) const;
+    /+ virtual +/ QPaintDevice redirected(QPoint* offset) const;
+    /+ virtual +/ QPainter* sharedPainter() const;
 }
 
 /// Binding for C++ class [QPaintDevice](https://doc.qt.io/qt-6/qpaintdevice.html).
