@@ -82,7 +82,7 @@ auto executeTimeout(string[] args, Duration timeout, const string[string] env = 
 
 string translateCompileArg(string compiler, string arg)
 {
-    if (compiler.endsWith("ldc2"))
+    if (compiler.endsWith("ldc2") || compiler.endsWith("ldc2.exe"))
     {
         if (arg.startsWith("-version="))
             arg = "--d-version=" ~ arg[9 .. $];
@@ -352,7 +352,7 @@ int main(string[] args)
         }
         dmdArgs ~= translateCompileArg(compiler, "-version=DQT_NO_CONVENIENCE_WRAPPERS");
         dmdArgs ~= "-od" ~ resultsDir;
-        if (compiler.endsWith("ldc2"))
+        if (compiler.endsWith("ldc2") || compiler.endsWith("ldc2.exe"))
             dmdArgs ~= "-of" ~ buildPath(resultsDir, "libdqt" ~ toLower(m) ~ libExt);
         else
             dmdArgs ~= "-of" ~ "libdqt" ~ toLower(m) ~ libExt;
