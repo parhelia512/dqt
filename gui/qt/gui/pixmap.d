@@ -57,7 +57,14 @@ private:
 public:
     import qt.core.namespace;
     @disable this();
-    /+this();+/
+    pragma(mangle, defaultConstructorMangling(__traits(identifier, typeof(this))))
+    ref typeof(this) rawConstructor();
+    static typeof(this) create()
+    {
+        typeof(this) r = typeof(this).init;
+        r.rawConstructor();
+        return r;
+    }
 
     /+ explicit +/this(QPlatformPixmap* data);
     this(int w, int h);
