@@ -290,9 +290,9 @@ alias PageBreakFlags = QFlags!(PageBreakFlag);
         format_type = type;
     }
 
-    //@disable this(this);
-    //this(ref const(QTextFormat) rhs);
-    //ref QTextFormat opAssign(ref const(QTextFormat) rhs);
+    @disable this(this);
+    this(ref const(QTextFormat) rhs);
+    ref QTextFormat opAssign(ref const(QTextFormat) rhs);
     ~this();
 
     /+ void swap(QTextFormat &other)
@@ -366,15 +366,15 @@ alias PageBreakFlags = QFlags!(PageBreakFlag);
     pragma(inline, true) /+ Qt:: +/qt.core.namespace.LayoutDirection layoutDirection() const
         { return cast(/+ Qt:: +/qt.core.namespace.LayoutDirection) (intProperty(QTextFormat.Property.LayoutDirection)); }
 
-/*    pragma(inline, true) void setBackground(ref const(QBrush) brush)
-    { setProperty(Property.BackgroundBrush, brush); }*/
+    pragma(inline, true) void setBackground(ref const(QBrush) brush)
+    { setProperty(Property.BackgroundBrush, brush); }
     pragma(inline, true) QBrush background() const
     { return brushProperty(Property.BackgroundBrush); }
     pragma(inline, true) void clearBackground()
     { clearProperty(Property.BackgroundBrush); }
 
-/+    pragma(inline, true) void setForeground(ref const(QBrush) brush)
-    { setProperty(Property.ForegroundBrush, brush); }+/
+    pragma(inline, true) void setForeground(ref const(QBrush) brush)
+    { setProperty(Property.ForegroundBrush, brush); }
     pragma(inline, true) QBrush foreground() const
     { return brushProperty(Property.ForegroundBrush); }
     pragma(inline, true) void clearForeground()
@@ -424,6 +424,16 @@ public:
     }
 
     /+this();+/
+    @disable this(this);
+    this(ref const(typeof(this)) rhs)
+    {
+        this.tupleof = (*cast(typeof(this)*) &rhs).tupleof;
+    }
+    ref typeof(this) opAssign(ref const(typeof(this)) rhs)
+    {
+        this.tupleof = (*cast(typeof(this)*) &rhs).tupleof;
+        return this;
+    }
 
     bool isValid() const { return isCharFormat(); }
 

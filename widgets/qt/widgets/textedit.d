@@ -209,6 +209,17 @@ alias AutoFormatting = QFlags!(AutoFormattingFlag);    /+ Q_FLAG(AutoFormatting)
     {
         QTextCursor cursor;
         QTextCharFormat format;
+
+        @disable this(this);
+        this(ref const(typeof(this)) rhs)
+        {
+            this.tupleof = (*cast(typeof(this)*) &rhs).tupleof;
+        }
+        ref typeof(this) opAssign(ref const(typeof(this)) rhs)
+        {
+            this.tupleof = (*cast(typeof(this)*) &rhs).tupleof;
+            return this;
+        }
     }
     final void setExtraSelections(ref const(QList!(ExtraSelection)) selections);
     final QList!(ExtraSelection) extraSelections() const;

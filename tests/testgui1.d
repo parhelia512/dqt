@@ -404,3 +404,91 @@ unittest
     assert(image.pixelColor(5, 5) == QColor(/+ Qt:: +/qt.core.namespace.GlobalColor.blue));
     assert(image.pixelColor(30, 30) == QColor(/+ Qt:: +/qt.core.namespace.GlobalColor.red));
 }
+
+version (Android)
+{}
+else
+unittest
+{
+    import qt.core.global;
+    import qt.core.namespace;
+    import qt.core.point;
+    import qt.core.string;
+    import qt.core.vector;
+    import qt.gui.brush;
+    import qt.gui.color;
+    import qt.gui.font;
+    import qt.gui.fontdatabase;
+    import qt.gui.fontmetrics;
+    import qt.gui.textlayout;
+    import qt.gui.textoption;
+
+    QString text = cast(QString) ("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod"
+                   ~ " tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim"
+                   ~ " veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea"
+                   ~ " commodo consequat. Duis aute irure dolor in reprehenderit in voluptate"
+                   ~ " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat"
+                   ~ " cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est"
+                   ~ " laborum.");
+
+    QVector!(QTextLayout.FormatRange) formats = QVector!(QTextLayout.FormatRange).create();
+
+    QFont font1 = QFontDatabase.systemFont(QFontDatabase.SystemFont.FixedFont);
+    font1.setPixelSize(14);
+    font1.setStyleHint(QFont.StyleHint.Monospace, QFont.StyleStrategy.PreferMatch);
+    font1.setHintingPreference(QFont.HintingPreference.PreferNoHinting);
+
+    QFont font2 = font1;
+    font2.setPixelSize(28);
+
+    auto fm = QFontMetricsF(font1);
+    int lineWidth = cast(int) (fm.averageCharWidth() * 80.5);
+
+    QTextLayout.FormatRange fr;
+    fr.start = 120;
+    fr.length = 50;
+    fr.format.setBackground(QColor(255, 255, 0, 180));
+    fr.format.setForeground(QBrush(QColor(/+ Qt:: +/qt.core.namespace.GlobalColor.black)));
+    fr.format.setFont(font2);
+    formats.append(fr);
+
+    auto layout = QTextLayout(text, font1);
+    QTextOption textOption;
+    textOption.setWrapMode(QTextOption.WrapMode.WordWrap);
+    textOption.setAlignment(/+ Qt:: +/qt.core.namespace.AlignmentFlag.AlignCenter);
+    layout.setTextOption(textOption);
+    layout.setFormats(formats);
+
+    layout.beginLayout();
+    qreal y = 0;
+    while (true)
+    {
+        QTextLine line = layout.createLine();
+        if (!line.isValid())
+            break;
+        line.setLineWidth(lineWidth);
+        line.setPosition(QPointF(0, y));
+        y += line.height();
+    }
+    layout.endLayout();
+
+    assert(layout.lineCount() >= 5);
+    assert(layout.lineCount() <= 9);
+
+    int covered = 0;
+    for (int i = 0; i < layout.lineCount(); ++i) {
+        QTextLine ln = layout.lineAt(i);
+        assert(ln.textStart() == covered);
+        assert(ln.textLength() > 0);
+        if (i == 1 || i == 2)
+            assert(ln.height() > fm.height() * 1.6);
+        else
+            assert(ln.height() < fm.height() * 1.4);
+        covered += ln.textLength();
+    }
+    assert(covered == text.length());
+
+    assert(layout.boundingRect().width() == lineWidth);
+    assert(layout.boundingRect().height() >= fm.height() * (layout.lineCount() + 2) * 0.9);
+    assert(layout.boundingRect().height() <= fm.height() * (layout.lineCount() + 2) * 1.1);
+}
