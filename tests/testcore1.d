@@ -37,7 +37,7 @@ shared static this()
     qRegisterMetaType!(TestObject.CustomEnum)("CustomEnum".ptr);
     qRegisterMetaType!(TestObject.CustomFlags)("CustomFlags".ptr);
 
-    app = new QCoreApplication(Runtime.cArgs.argc, Runtime.cArgs.argv);
+    app = cpp_new!QCoreApplication(Runtime.cArgs.argc, Runtime.cArgs.argv);
     assert(QCoreApplication.instance() is app);
 
     QVersionNumber runtimeVersion = QLibraryInfo.version_();
@@ -46,6 +46,13 @@ shared static this()
     sameRuntimeVersion = runtimeVersion.majorVersion() == QT_VERSION_MAJOR && runtimeVersion.minorVersion() == QT_VERSION_MINOR;
     if (!sameRuntimeVersion)
         printf("Some tests are disabled, because the Qt runtime version is different from the header version.\n");
+}
+shared static ~this()
+{
+    import core.stdcpp.new_;
+
+    cpp_delete(app);
+    app = null;
 }
 
 @Q_DECLARE_METATYPE extern(C++) struct CustomStruct1
