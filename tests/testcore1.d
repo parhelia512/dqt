@@ -44,6 +44,13 @@ shared static this()
     if (!sameRuntimeVersion)
         printf("Some tests are disabled, because the Qt runtime version is different from the header version.\n");
 }
+shared static ~this()
+{
+    import core.stdcpp.new_;
+
+    cpp_delete(app);
+    app = null;
+}
 
 @Q_DECLARE_METATYPE extern(C++) struct CustomStruct1
 {

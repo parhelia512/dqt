@@ -13,12 +13,21 @@ QGuiApplication app;
 version (Android)
 {}
 else
+{
 shared static this()
 {
     import core.runtime;
     import core.stdcpp.new_;
 
     app = cpp_new!QGuiApplication(Runtime.cArgs.argc, Runtime.cArgs.argv);
+}
+shared static ~this()
+{
+    import core.stdcpp.new_;
+
+    cpp_delete(app);
+    app = null;
+}
 }
 
 class TestWindow : QWindow
