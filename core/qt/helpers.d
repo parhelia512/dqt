@@ -1304,7 +1304,7 @@ enum isWrapperCallable(This, alias F, Params...) = () {
         return false;
     else static if (!callableWithNParameters!(F, Params.length))
         return false;
-    else static if (FunctionParameters!F.length == 1 && is(const(FunctionParameters!F[0]) == const(This)))
+    else static if (__traits(identifier, F) == "__ctor" && FunctionParameters!F.length == 1 && is(const(FunctionParameters!F[0]) == const(This)))
         return false;
     else
     {

@@ -193,6 +193,136 @@ unittest
 
 unittest
 {
+    import qt.gui.image;
+
+    QImage image = QImage.create();
+    assert(image.isNull());
+
+    image = QImage(200, 100, QImage.Format.Format_ARGB32_Premultiplied);
+    assert(!image.isNull());
+    assert(image.width() == 200);
+    assert(image.height() == 100);
+
+    image = QImage.create();
+    assert(image.isNull());
+}
+
+version (Android)
+{}
+else
+unittest
+{
+    import qt.gui.pixmap;
+
+    QPixmap pixmap = QPixmap.create();
+    assert(pixmap.isNull());
+
+    pixmap = QPixmap(200, 100);
+    assert(!pixmap.isNull());
+    assert(pixmap.width() == 200);
+    assert(pixmap.height() == 100);
+
+    pixmap = QPixmap.create();
+    assert(pixmap.isNull());
+}
+
+extern (C++) void cleanupFunc(void* data)
+{
+    (*cast(int*)data)++;
+}
+
+unittest
+{
+    import qt.core.global;
+    import qt.gui.color;
+    import qt.gui.image;
+
+    ubyte[3 * 16 * 32] data;
+    data[] = 0x55;
+    int cleanupCalled = 0;
+    QImage image = QImage(data.ptr, 16, 32, QImage.Format.Format_RGB888, &cleanupFunc, &cleanupCalled);
+    assert(cleanupCalled == 0);
+    assert(image.constBits() == data.ptr);
+    assert(cleanupCalled == 0);
+    assert(image.bits() == data.ptr);
+    assert(cleanupCalled == 0);
+
+    image.setPixelColor(0, 0, QColor(0x10, 0x20, 0x30));
+    assert(cleanupCalled == 0);
+    assert(image.constBits() == data.ptr);
+    assert(data[0] == 0x10);
+    assert(data[1] == 0x20);
+    assert(data[2] == 0x30);
+
+    image = QImage.create();
+    assert(image.isNull());
+    assert(cleanupCalled == 1);
+}
+
+unittest
+{
+    import qt.core.global;
+    import qt.gui.color;
+    import qt.gui.image;
+
+    ubyte[3 * 16 * 32] data;
+    data[] = 0x55;
+    int cleanupCalled = 0;
+    QImage image = QImage(cast(const(ubyte)*)data.ptr, 16, 32, QImage.Format.Format_RGB888, &cleanupFunc, &cleanupCalled);
+    assert(cleanupCalled == 0);
+    assert(image.constBits() == data.ptr);
+    assert(cleanupCalled == 0);
+
+    image.setPixelColor(0, 0, QColor(0x10, 0x20, 0x30));
+    assert(cleanupCalled == 1); // setPixel creates a copy, because data was const. The original image is cleaned up.
+    assert(image.constBits() != data.ptr);
+    assert(data[0] == 0x55);
+    assert(data[1] == 0x55);
+    assert(data[2] == 0x55);
+
+    image = QImage.create();
+    assert(image.isNull());
+    assert(cleanupCalled == 1);
+}
+
+unittest
+{
+    import qt.core.global;
+    import qt.gui.color;
+    import qt.gui.image;
+
+    ubyte[3 * 16 * 32] data;
+    data[] = 0x55;
+    int cleanupCalled = 0;
+    QImage image = QImage(cast(const(ubyte)*)data.ptr, 16, 32, QImage.Format.Format_RGB888, &cleanupFunc, &cleanupCalled);
+    assert(cleanupCalled == 0);
+    assert(image.constBits() == data.ptr);
+    assert(cleanupCalled == 0);
+
+    QImage image2 = image;
+    assert(cleanupCalled == 0);
+    assert(image2.constBits() == data.ptr);
+    assert(cleanupCalled == 0);
+
+    image.setPixelColor(0, 0, QColor(0x10, 0x20, 0x30));
+    assert(cleanupCalled == 0);
+    assert(image.constBits() != data.ptr);
+    assert(image2.constBits() == data.ptr);
+    assert(data[0] == 0x55); // Data was not modified.
+    assert(data[1] == 0x55);
+    assert(data[2] == 0x55);
+
+    image = QImage.create();
+    assert(image.isNull());
+    assert(cleanupCalled == 0);
+
+    image2 = QImage.create();
+    assert(image2.isNull());
+    assert(cleanupCalled == 1);
+}
+
+unittest
+{
     import qt.core.namespace;
     import qt.core.rect;
     import qt.gui.brush;
@@ -209,6 +339,33 @@ unittest
         painter.fillRect(QRect(10, 10, 50, 50), QBrush(QColor(/+ Qt:: +/qt.core.namespace.GlobalColor.red)));
     }
 
+    assert(image.pixelColor(5, 5) == QColor(/+ Qt:: +/qt.core.namespace.GlobalColor.blue));
+    assert(image.pixelColor(30, 30) == QColor(/+ Qt:: +/qt.core.namespace.GlobalColor.red));
+}
+
+version (Android)
+{}
+else
+unittest
+{
+    import qt.core.namespace;
+    import qt.core.rect;
+    import qt.gui.brush;
+    import qt.gui.color;
+    import qt.gui.image;
+    import qt.gui.painter;
+    import qt.gui.pixmap;
+
+    auto pixmap = QPixmap(100, 100);
+    pixmap.fill(/+ Qt:: +/qt.core.namespace.GlobalColor.transparent);
+
+    {
+        auto painter = QPainter(pixmap.paintDevice);
+        painter.fillRect(QRect(0, 0, pixmap.width(), pixmap.height()), QBrush(QColor(/+ Qt:: +/qt.core.namespace.GlobalColor.blue)));
+        painter.fillRect(QRect(10, 10, 50, 50), QBrush(QColor(/+ Qt:: +/qt.core.namespace.GlobalColor.red)));
+    }
+
+    QImage image = pixmap.toImage();
     assert(image.pixelColor(5, 5) == QColor(/+ Qt:: +/qt.core.namespace.GlobalColor.blue));
     assert(image.pixelColor(30, 30) == QColor(/+ Qt:: +/qt.core.namespace.GlobalColor.red));
 }
