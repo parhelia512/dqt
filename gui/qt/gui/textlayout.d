@@ -125,6 +125,17 @@ public:
         int length;
         QTextCharFormat format;
 
+        @disable this(this);
+        this(ref const(typeof(this)) rhs)
+        {
+            this.tupleof = (*cast(typeof(this)*) &rhs).tupleof;
+        }
+        ref typeof(this) opAssign(ref const(typeof(this)) rhs)
+        {
+            this.tupleof = (*cast(typeof(this)*) &rhs).tupleof;
+            return this;
+        }
+
         /+ friend bool operator==(const FormatRange &lhs, const FormatRange &rhs)
         { return lhs.start == rhs.start && lhs.length == rhs.length && lhs.format == rhs.format; } +/
         /+ friend bool operator!=(const FormatRange &lhs, const FormatRange &rhs)

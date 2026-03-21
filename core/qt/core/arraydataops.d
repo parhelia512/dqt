@@ -501,21 +501,21 @@ public:
             setup(pos, 1);
 
             if (sourceCopyConstruct) {
-                (mixin(Q_ASSERT(q{QGenericArrayOps.Inserter.sourceCopyConstruct == 1})));
-                core.lifetime.emplace!T(end, /+ std:: +/move(t));
+                (mixin(Q_ASSERT(q{QGenericArrayOps!T.Inserter.sourceCopyConstruct == 1})));
+                core.lifetime.emplace!T(end, /+ std:: +//*move*/(t));
                 ++size;
             } else {
                 // create a new element at the end by move constructing one existing element
                 // inside the array.
-                core.lifetime.emplace!T(end, /+ std:: +/move(*(end - 1)));
+                core.lifetime.emplace!T(end, /+ std:: +//*move*/(*(end - 1)));
                 ++size;
 
                 // now move assign existing elements towards the end
                 for (qsizetype i = 0; i != move; --i)
-                    last[i] = /+ std:: +/move(last[i - 1]);
+                    last[i] = /+ std:: +//*move*/(last[i - 1]);
 
                 // and move the new item into place
-                *where = /+ std:: +/move(t);
+                *where = /+ std:: +//*move*/(t);
             }
         }
     }
@@ -573,7 +573,7 @@ public:
     }
 
     /+ template<typename... Args> +/
-    void emplace(Args)(ref QArrayDataPointer!T this_, qsizetype i, auto ref Args /+ && +/ args)
+    void emplace(Args...)(ref QArrayDataPointer!T this_, qsizetype i, auto ref Args /+ && +/ args)
     {
         import core.lifetime;
 
@@ -591,7 +591,10 @@ public:
                 return;
             }
         }
-        auto tmp = T(args /+ /+ std:: +/forward!(Args)(args)...+/);
+        static if (Args.length == 1 && is(Args[0] == T))
+            auto tmp = args[0];
+        else
+            auto tmp = T(args /+ /+ std:: +/forward!(Args)(args)...+/);
         const(bool) growsAtBegin = this_.size != 0 && i == 0;
         const pos = growsAtBegin ? Data.GrowthPosition.GrowsAtBeginning : Data.GrowthPosition.GrowsAtEnd;
 

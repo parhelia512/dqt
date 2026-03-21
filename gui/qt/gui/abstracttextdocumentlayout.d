@@ -48,6 +48,17 @@ public:
     {
         QTextCursor cursor;
         QTextCharFormat format;
+
+        @disable this(this);
+        this(ref const(typeof(this)) rhs)
+        {
+            this.tupleof = (*cast(typeof(this)*) &rhs).tupleof;
+        }
+        ref typeof(this) opAssign(ref const(typeof(this)) rhs)
+        {
+            this.tupleof = (*cast(typeof(this)*) &rhs).tupleof;
+            return this;
+        }
     }
 
     struct PaintContext
