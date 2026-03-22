@@ -19,7 +19,10 @@ shared static this()
     import core.runtime;
     import core.stdcpp.new_;
 
-    app = cpp_new!QGuiApplication(Runtime.cArgs.argc, Runtime.cArgs.argv);
+    static __gshared int argc_copy; // Needs to be global, because the application stores a reference.
+    argc_copy = Runtime.cArgs.argc;
+
+    app = cpp_new!QGuiApplication(argc_copy, Runtime.cArgs.argv);
 }
 shared static ~this()
 {

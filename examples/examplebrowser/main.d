@@ -9,7 +9,9 @@ int main()
     import examplebrowser.mainwindow;
     import qt.widgets.application;
 
-    scope a = new QApplication(Runtime.cArgs.argc, Runtime.cArgs.argv);
+    int argc = Runtime.cArgs.argc; // Reference needs to be valid for lifetime of application object.
+    char** argv = Runtime.cArgs.argv;
+    scope a = new QApplication(argc, argv);
     scope w = new MainWindow;
     w.show();
     return a.exec();
