@@ -117,7 +117,9 @@ unittest
     import core.runtime;
     QString styleName = QString("Fusion");
     QApplication.setStyle(styleName);
-    scope app = new QApplication(Runtime.cArgs.argc, Runtime.cArgs.argv);
+    int argc = Runtime.cArgs.argc; // Reference needs to be valid for lifetime of application object.
+    char** argv = Runtime.cArgs.argv;
+    scope app = new QApplication(argc, argv);
 
     QLocale locale = QLocale.c();
     QLocale.setDefault(locale);

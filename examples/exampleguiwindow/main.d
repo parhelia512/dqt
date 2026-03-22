@@ -9,7 +9,9 @@ int main(string[] args)
     import exampleguiwindow.paintwindow;
     import qt.gui.guiapplication;
 
-    scope a = new QGuiApplication(Runtime.cArgs.argc, Runtime.cArgs.argv);
+    int argc = Runtime.cArgs.argc; // Reference needs to be valid for lifetime of application object.
+    char** argv = Runtime.cArgs.argv;
+    scope a = new QGuiApplication(argc, argv);
 
     scope window = new PaintWindow;
     window.show();

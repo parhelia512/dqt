@@ -10,7 +10,9 @@ int main(string[] args)
     import qt.core.string;
     import qt.widgets.application;
 
-    scope a = new QApplication(Runtime.cArgs.argc, Runtime.cArgs.argv);
+    int argc = Runtime.cArgs.argc; // Reference needs to be valid for lifetime of application object.
+    char** argv = Runtime.cArgs.argv;
+    scope a = new QApplication(argc, argv);
     string filename;
     if (args.length >= 2)
         filename = args[1];

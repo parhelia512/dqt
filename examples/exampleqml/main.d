@@ -20,7 +20,9 @@ int main()
 /+ #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif +/
-    scope app = new QGuiApplication(Runtime.cArgs.argc, Runtime.cArgs.argv);
+    int argc = Runtime.cArgs.argc; // Reference needs to be valid for lifetime of application object.
+    char** argv = Runtime.cArgs.argv;
+    scope app = new QGuiApplication(argc, argv);
 
     QQuickStyle.setStyle("Fusion");
 

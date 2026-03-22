@@ -34,7 +34,10 @@ shared static this()
         registerAndroidJVM();
     }
 
-    app = cpp_new!QCoreApplication(Runtime.cArgs.argc, Runtime.cArgs.argv);
+    static __gshared int argc_copy; // Needs to be global, because the application stores a reference.
+    argc_copy = Runtime.cArgs.argc;
+
+    app = cpp_new!QCoreApplication(argc_copy, Runtime.cArgs.argv);
     assert(QCoreApplication.instance() is app);
 
     QVersionNumber runtimeVersion = QLibraryInfo.version_();
