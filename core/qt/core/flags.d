@@ -143,7 +143,7 @@ public:
     static if (defined!"QT_TYPESAFE_FLAGS")
     {
         /+/+ explicit +/pragma(inline, true)  auto opCast(T : Int)() const nothrow { return i; }+/
-        /+/+ explicit +/pragma(inline, true)  auto opCast(T : bool)() const nothrow { return i; }+/
+        /+ explicit +/pragma(inline, true)  auto opCast(T : bool)() const nothrow { return i; }
         // For some reason, moc goes through QFlag in order to read/write
         // properties of type QFlags; so a conversion to QFlag is also
         // needed here. (It otherwise goes through a QFlags->int->QFlag

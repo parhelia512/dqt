@@ -102,7 +102,7 @@ public:
     /+ QPropertyBindingPrivatePtr(QPropertyBindingPrivatePtr &&o) noexcept : d(qExchange(o.d, nullptr)) {} +/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QPropertyBindingPrivatePtr) +/
 
-    /+auto opCast(T : bool) () const nothrow { return d !is null; }+/
+    auto opCast(T : bool) () const nothrow { return d !is null; }
     /+bool operator !() const nothrow { return d is null; }+/
 
     /+ void swap(QPropertyBindingPrivatePtr &other) noexcept
@@ -367,10 +367,10 @@ public:
         return reinterpret_cast!(T*)(*d & QTaggedPointer!(T, Tag).pointerMask());
     }
 
-    /+/+ explicit +/ auto opCast(T : bool)() const
+    /+ explicit +/ auto opCast(T : bool)() const
     {
         return d !is null;
-    }+/
+    }
 
 private:
     quintptr* d = null;

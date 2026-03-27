@@ -79,10 +79,10 @@ public:
         return data();
     }+/
 
-    /+/+ explicit +/ auto opCast(T : bool)() const nothrow
+    /+ explicit +/ auto opCast(T : bool)() const nothrow
     {
         return !isNull();
-    }+/
+    }
 
 /+ #ifdef Q_QDOC
     QTaggedPointer &operator=(T *other) noexcept;

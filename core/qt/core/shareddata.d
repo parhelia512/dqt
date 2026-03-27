@@ -144,7 +144,7 @@ public:
     /+ QSharedDataPointer(QSharedDataPointer &&o) noexcept : d(qExchange(o.d, nullptr)) {} +/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QSharedDataPointer) +/
 
-    /+auto opCast(T : bool) () const nothrow { return d !is null; }+/
+    auto opCast(T : bool) () const nothrow { return d !is null; }
     /+bool operator !() const nothrow { return d is null; }+/
 
     /+ void swap(QSharedDataPointer &other) noexcept
@@ -298,7 +298,7 @@ public:
     /+ QExplicitlySharedDataPointer(QExplicitlySharedDataPointer &&o) noexcept : d(qExchange(o.d, nullptr)) {} +/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QExplicitlySharedDataPointer) +/
 
-    /+auto opCast(T : bool) () const nothrow { return d !is null; }+/
+    auto opCast(T : bool) () const nothrow { return d !is null; }
     /+bool operator !() const nothrow { return d is null; }+/
 
     /+ void swap(QExplicitlySharedDataPointer &other) noexcept

@@ -121,10 +121,10 @@ public:
         return !d;
     }+/
 
-    /+/+ explicit +/ auto opCast(T : bool)() const
+    /+ explicit +/ auto opCast(T : bool)() const
     {
         return !isNull();
-    }+/
+    }
 
     P data() const nothrow
     {
