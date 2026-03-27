@@ -9,6 +9,24 @@ private bool simpleStartsWith(string a, string b)
     return a[0..b.length] == b;
 }
 
+// The template parameter names have to match the real name for operator
+// overloading to work around https://github.com/dlang/dmd/issues/22819.
+template ApplyTemplateOpBinary(alias opBinary, P...)
+{
+    alias ApplyTemplateOpBinary = opBinary!P;
+}
+template ApplyTemplateOpOpAssign(alias opOpAssign, P...)
+{
+    alias ApplyTemplateOpOpAssign = opOpAssign!P;
+}
+template ApplyTemplateOpUnary(alias opUnary, P...)
+{
+    alias ApplyTemplateOpUnary = opUnary!P;
+}
+
+immutable binaryOperators = ["+", "-", "*", "/", "%", "^^", "&", "|", "^", "<<", ">>", ">>>", "~", "in"];
+immutable unaryOperators = ["+", "-", "*", "~", "++", "--"];
+
 // Accesses all functions in module m, so a wrong mangling will become a linker error.
 size_t linkAll(alias m)()
 {
@@ -61,6 +79,41 @@ size_t linkAll(alias m)()
                                 else
                                     sum += cast(size_t)cast(void*)x;
                             }}
+                        }
+                    }
+                    static if (field == "opBinary")
+                    {
+                        static foreach(opBinary; __traits(getOverloads, S, field, true))
+                        {
+                            static foreach (op; binaryOperators)
+                                static if (__traits(compiles, ApplyTemplateOpBinary!(opBinary, op)) && !__traits(isDisabled, ApplyTemplateOpBinary!(opBinary, op)))
+                                {
+                                    sum += cast(size_t)cast(void*)&ApplyTemplateOpBinary!(opBinary, op);
+                                }
+                        }
+                    }
+                    static if (field == "opOpAssign"
+                        // Workaround for older compiler:
+                        && !(__VENDOR__ == "Digital Mars D" && __VERSION__ < 2108L && s.among("QJSValueList", "QQmlProperties")))
+                    {
+                        static foreach(opOpAssign; __traits(getOverloads, S, field, true))
+                        {
+                            static foreach (op; binaryOperators)
+                                static if (__traits(compiles, ApplyTemplateOpOpAssign!(opOpAssign, op)) && !__traits(isDisabled, ApplyTemplateOpOpAssign!(opOpAssign, op)))
+                                {
+                                    sum += cast(size_t)cast(void*)&ApplyTemplateOpOpAssign!(opOpAssign, op);
+                                }
+                        }
+                    }
+                    static if (field == "opUnary")
+                    {
+                        static foreach(opUnary; __traits(getOverloads, S, field, true))
+                        {
+                            static foreach (op; unaryOperators)
+                                static if (__traits(compiles, ApplyTemplateOpUnary!(opUnary, op)) && !__traits(isDisabled, ApplyTemplateOpUnary!(opUnary, op)))
+                                {
+                                    sum += cast(size_t)cast(void*)&ApplyTemplateOpUnary!(opUnary, op);
+                                }
                         }
                     }
                 }

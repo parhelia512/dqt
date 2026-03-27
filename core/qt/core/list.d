@@ -919,10 +919,10 @@ public:
 //    void shrink_to_fit() { squeeze(); }
 
     // comfort
-    extern(D) ref QList!(T) opOpAssign(string op)(ref const(QList!(T)) l) if (op == "~") { append(l); return this; }
+    /*extern(D) ref QList!(T) opOpAssign(string op)(ref const(QList!(T)) l) if (op == "~") { append(l); return this; }
     /+ QList<T> &operator+=(QList<T> &&l) { append(std::move(l)); return *this; } +/
     extern(D) pragma(inline, true) QList!(T) opBinary(string op)(ref const(QList!(T)) l) const if (op == "~")
-    { QList n = this; n ~= l; return n; }
+    { QList n = this; n ~= l; return n; }*/
     /+ inline QList<T> operator+(QList<T> &&l) const
     { QList n = *this; n += std::move(l); return n; } +/
     extern(D) pragma(inline, true) ref QList!(T) opOpAssign(string op)(parameter_type t) if (op == "~")

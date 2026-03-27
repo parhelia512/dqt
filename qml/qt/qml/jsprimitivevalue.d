@@ -341,12 +341,12 @@ public:
         return std::fmod(lhs.toDouble(), rhs.toDouble());
     } +/
 
-    ref QJSPrimitiveValue opUnary(string op)() if (op == "++")
+    /*ref QJSPrimitiveValue opUnary(string op)() if (op == "++")
     {
         // ++a is modeled as a -= (-1) to avoid the potential string concatenation
         auto tmp = QJSPrimitiveValue(-1);
         return this = operate!(SubOperators)(this, tmp);
-    }
+    }*/
 
     /+QJSPrimitiveValue operator ++(int)
     {
@@ -356,11 +356,11 @@ public:
         return +other; // We still need to coerce the original value.
     }+/
 
-    ref QJSPrimitiveValue opUnary(string op)() if (op == "--")
+    /*ref QJSPrimitiveValue opUnary(string op)() if (op == "--")
     {
         auto tmp = QJSPrimitiveValue(-1);
         return operate!(SubOperators)(this, tmp);
-    }
+    }*/
 
     /+QJSPrimitiveValue operator --(int)
     {

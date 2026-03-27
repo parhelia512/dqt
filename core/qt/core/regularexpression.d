@@ -396,7 +396,7 @@ public:
         return m_currentMatch;
     }
 
-    ref QRegularExpressionMatchIteratorRangeBasedForIterator opUnary(string op)() if (op == "++")
+    /*ref QRegularExpressionMatchIteratorRangeBasedForIterator opUnary(string op)() if (op == "++")
     {
         (mixin(Q_ASSERT_X(q{!m_atEnd},q{ Q_FUNC_INFO},q{ "operator++ called on an iterator already at the end"})));
         if (m_matchIterator.hasNext()) {
@@ -407,7 +407,7 @@ public:
         }
 
         return this;
-    }
+    }*/
 
     /+QRegularExpressionMatchIteratorRangeBasedForIterator operator ++(int)
     {

@@ -62,7 +62,7 @@ public:
     pragma(inline, true) void setBottom(int abottom) nothrow
     { m_bottom = abottom; }
 
-    pragma(inline, true) ref QMargins opOpAssign(string op)(ref const(QMargins) margins) nothrow if (op == "+")
+    /*pragma(inline, true) ref QMargins opOpAssign(string op)(ref const(QMargins) margins) nothrow if (op == "+")
     {
         return (){return this = this + margins;
     }();
@@ -71,7 +71,7 @@ public:
     {
         return (){return this = this - margins;
     }();
-    }
+    }*/
     pragma(inline, true) ref QMargins opOpAssign(string op)(int margin) nothrow if (op == "+")
     {
         m_left += margin;
@@ -301,7 +301,7 @@ public:
     pragma(inline, true) void setBottom(qreal abottom) nothrow
     { m_bottom = abottom; }
 
-    pragma(inline, true) ref QMarginsF opOpAssign(string op)(ref const(QMarginsF) margins) nothrow if (op == "+")
+    /*pragma(inline, true) ref QMarginsF opOpAssign(string op)(ref const(QMarginsF) margins) nothrow if (op == "+")
     {
         return (){return this = this + margins;
     }();
@@ -310,7 +310,7 @@ public:
     {
         return (){return this = this - margins;
     }();
-    }
+    }*/
     pragma(inline, true) ref QMarginsF opOpAssign(string op)(qreal addend) nothrow if (op == "+")
     {
         m_left += addend;

@@ -93,10 +93,10 @@ public:
     { return dt + (-msecs); } +/
     /+ friend qint64 operator-(QDeadlineTimer dt1, QDeadlineTimer dt2)
     { return (dt1.deadlineNSecs() - dt2.deadlineNSecs()) / (1000 * 1000); } +/
-    ref QDeadlineTimer opOpAssign(string op)(qint64 msecs) if (op == "+")
+    /*ref QDeadlineTimer opOpAssign(string op)(qint64 msecs) if (op == "+")
     { this = this + msecs; return this; }
     ref QDeadlineTimer opOpAssign(string op)(qint64 msecs) if (op == "-")
-    { this = this + (-msecs); return this; }
+    { this = this + (-msecs); return this; }*/
 
     /+ template <class Clock, class Duration> +/
     /+ QDeadlineTimer(std::chrono::time_point<Clock, Duration> deadline_,

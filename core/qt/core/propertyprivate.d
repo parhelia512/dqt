@@ -55,7 +55,7 @@ extern(C++, class) struct QPropertyBindingPrivatePtr
 {
 public:
     alias T = /+ QtPrivate:: +/RefCounted;
-    ref T opUnary(string op)() const if (op == "*") { return *d; }
+    /*ref T opUnary(string op)() const if (op == "*") { return *d; }*/
     /+T* operator ->() nothrow { return d; }+/
     /+T* operator ->() const nothrow { return d; }+/
     /+/+ explicit +/ auto opCast(T : T)() { return d; }+/
