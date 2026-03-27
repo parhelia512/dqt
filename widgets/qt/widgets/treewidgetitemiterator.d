@@ -95,10 +95,10 @@ alias IteratorFlags = QFlags!(IteratorFlag);
         return this;
     }
 
-    pragma(inline, true) QTreeWidgetItem opUnary(string op)() const if (op == "*")
+    /*pragma(inline, true) QTreeWidgetItem opUnary(string op)() const if (op == "*")
     {
         return current;
-    }
+    }*/
 
 private:
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{

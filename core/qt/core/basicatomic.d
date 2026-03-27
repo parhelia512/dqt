@@ -179,23 +179,23 @@ public:
     T fetchAndXorOrdered(T valueToAdd) nothrow
     { return Ops.fetchAndXorOrdered(_q_value, valueToAdd); }
 +/
-    T opUnary(string op)() nothrow if (op == "++")
-    { return fetchAndAddOrdered(1) + 1; }
+    /*T opUnary(string op)() nothrow if (op == "++")
+    { return fetchAndAddOrdered(1) + 1; }*/
     /+T operator ++(int) nothrow
     { return fetchAndAddOrdered(1); }+/
-    T opUnary(string op)() nothrow if (op == "--")
-    { return fetchAndSubOrdered(1) - 1; }
+    /*T opUnary(string op)() nothrow if (op == "--")
+    { return fetchAndSubOrdered(1) - 1; }*/
     /+T operator --(int) nothrow
     { return fetchAndSubOrdered(1); }+/
 
-    T opOpAssign(string op)(T v) nothrow if (op == "+")
+    /*T opOpAssign(string op)(T v) nothrow if (op == "+")
     { return fetchAndAddOrdered(v) + v; }
     T opOpAssign(string op)(T v) nothrow if (op == "-")
     { return fetchAndSubOrdered(v) - v; }
     T opOpAssign(string op)(T v) nothrow if (op == "&")
     { return fetchAndAndOrdered(v) & v; }
     T opOpAssign(string op)(T v) nothrow if (op == "|")
-    { return fetchAndOrOrdered(v) | v; }
+    { return fetchAndOrOrdered(v) | v; }*/
     /+T operator ^=(T v) nothrow
     { return fetchAndXorOrdered(v) ^ v; }+/
 

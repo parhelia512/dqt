@@ -148,7 +148,7 @@ public:
     }
 
     extern(D) pragma(inline, true) QStringList opBinary(string op)(ref const(QStringList) other) const if (op == "~")
-    { QStringList n = this; n ~= other; return n; }
+    { QStringList n = *cast(QStringList*)&this; n ~= other; return n; }
     /+pragma(inline, true) ref QStringList operator <<(ref const(QString) str)
     { append(str); return this; }+/
     /+pragma(inline, true) ref QStringList operator <<(ref const(QStringList) l)

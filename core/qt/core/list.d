@@ -787,7 +787,7 @@ public:
     {
         if (!l.isEmpty()) {
             if (d == &QListData.shared_null) {
-                this = l;
+                this = *cast(QList*)&l;
             } else {
                 Node* n = (d.ref_.isShared())
                           ? detach_helper_grow(int.max, l.size())
@@ -795,7 +795,7 @@ public:
                 /+ QT_TRY +/ {
                      /+ QT_CATCH(...) +/scope(failure) {
                         // restore the old end
-                        d.end -= int(reinterpret_cast!(Node*)(p.end()) - n);
+                        d.end -= cast(int)(reinterpret_cast!(Node*)(p.end()) - n);
                     }
                     node_copy(n, reinterpret_cast!(Node*)(p.end()),
                               reinterpret_cast!(Node*)(l.p.begin()));
@@ -805,7 +805,7 @@ public:
         return this;
     }
     extern(D) pragma(inline, true) QList!(T) opBinary(string op)(ref const(QList!(T)) l) const if (op == "~")
-    { QList n = this; n ~= l; return n; }
+    { QList n = *cast(QList*)&this; n ~= l; return n; }
     extern(D) pragma(inline, true) ref QList!(T) opOpAssign(string op)(ref const(T) t) if (op == "~")
     { append(t); return this; }
     /+pragma(inline, true) ref QList!(T) operator << (ref const(T) t)

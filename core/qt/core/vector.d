@@ -684,9 +684,9 @@ public:
     void shrink_to_fit() { squeeze(); }
 
     // comfort
-    extern(D) ref QVector!(T) opOpAssign(string op)(ref const(QVector!(T)) l) if (op == "~");
+    /*extern(D) ref QVector!(T) opOpAssign(string op)(ref const(QVector!(T)) l) if (op == "~");
     extern(D) pragma(inline, true) QVector!(T) opBinary(string op)(ref const(QVector!(T)) l) const if (op == "~")
-    { QVector n = this; n ~= l; return n; }
+    { QVector n = this; n ~= l; return n; }*/
     extern(D) pragma(inline, true) ref QVector!(T) opOpAssign(string op)(ref const(T) t) if (op == "~")
     { append(t); return this; }
     /+pragma(inline, true) ref QVector!(T) operator << (ref const(T) t)
