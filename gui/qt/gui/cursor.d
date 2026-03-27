@@ -85,7 +85,7 @@ public:
     @disable this(this);
     this(ref const(QCursor) cursor);
     ~this();
-    /+ref QCursor operator =(ref const(QCursor) cursor);+/
+    ref QCursor opAssign(ref const(QCursor) cursor);
     /+ QCursor(QCursor &&other) noexcept : d(other.d) { other.d = nullptr; } +/
     /+ inline QCursor &operator=(QCursor &&other) noexcept
     { swap(other); return *this; } +/

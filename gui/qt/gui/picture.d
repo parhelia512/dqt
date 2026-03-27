@@ -80,7 +80,7 @@ public:
     QRect boundingRect() const;
     void setBoundingRect(ref const(QRect) r);
 
-    /+ref QPicture operator =(ref const(QPicture) p);+/
+    ref QPicture opAssign(ref const(QPicture) p);
     /+ inline QPicture &operator=(QPicture &&other) noexcept
     { qSwap(d_ptr, other.d_ptr); return *this; } +/
     /+ inline void swap(QPicture &other) noexcept
@@ -188,7 +188,7 @@ public:
 private:
     /+ Q_DISABLE_COPY(QPictureIO) +/
 @disable this(this);
-/+@disable this(ref const(QPictureIO));+//+@disable ref QPictureIO operator =(ref const(QPictureIO));+/
+/+@disable this(ref const(QPictureIO));+//+@disable ref QPictureIO opAssign(ref const(QPictureIO));+/
     //void init_();
 
     QPictureIOData* d;

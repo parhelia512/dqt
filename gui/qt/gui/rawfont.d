@@ -75,7 +75,7 @@ alias LayoutFlags = QFlags!(LayoutFlag);
     @disable this(this);
     this(ref const(QRawFont) other);
     /+ QRawFont &operator=(QRawFont &&other) noexcept { swap(other); return *this; } +/
-    /+ref QRawFont operator =(ref const(QRawFont) other);+/
+    ref QRawFont opAssign(ref const(QRawFont) other);
     ~this();
 
     /+ void swap(QRawFont &other) noexcept { qSwap(d, other.d); } +/

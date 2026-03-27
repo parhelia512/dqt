@@ -196,7 +196,7 @@ struct Callable(Function)
     /+ ~Callable() = default; +/
     /+ Callable(const Callable &) = default; +/
     /+ Callable(Callable &&) = default; +/
-    /+@disable ref Callable operator =(ref const(Callable) );+/
+    @disable ref Callable opAssign(ref const(Callable) );
     /+ Callable &operator=(Callable &&) = default; +/
 
     /+void operator ()()

@@ -168,11 +168,11 @@ public:
         }
     /+ #endif +/
 
-        /+ref QUuid operator =(ref const(GUID) guid) nothrow
+        ref QUuid opAssign(ref const(GUID) guid) nothrow
         {
             this = QUuid(guid);
             return this;
-        }+/
+        }
 
         /+ auto opCast(T : GUID)() const nothrow
         {

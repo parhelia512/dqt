@@ -92,8 +92,8 @@ public:
     /+bool operator ==(ref const(QMatrix) ) const;+/
     /+bool operator !=(ref const(QMatrix) ) const;+/
 
-    /+ref QMatrix operator *=(ref const(QMatrix) );+/
-    /+QMatrix operator *(ref const(QMatrix) o) const;+/
+    ref QMatrix opOpAssign(string op)(ref const(QMatrix) ) if (op == "*");
+    QMatrix opBinary(string op)(ref const(QMatrix) o) const if (op == "*");
 
     /+auto opCast(T : QVariant)() const;+/
 

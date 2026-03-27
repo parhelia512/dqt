@@ -68,9 +68,9 @@ public:
     pragma(inline, true) ref QUrlTwoFlags opOpAssign(string op)(QUrlTwoFlags f) if (op == "|") { i |= f.i; return this; }
     pragma(inline, true) ref QUrlTwoFlags opOpAssign(string op)(E1 f) if (op == "|") { i |= f; return this; }
     pragma(inline, true) ref QUrlTwoFlags opOpAssign(string op)(E2 f) if (op == "|") { i |= f; return this; }
-    /+pragma(inline, true) ref QUrlTwoFlags operator ^=(QUrlTwoFlags f) { i ^= f.i; return this; }+/
-    /+pragma(inline, true) ref QUrlTwoFlags operator ^=(E1 f) { i ^= f; return this; }+/
-    /+pragma(inline, true) ref QUrlTwoFlags operator ^=(E2 f) { i ^= f; return this; }+/
+    pragma(inline, true) ref QUrlTwoFlags opOpAssign(string op)(QUrlTwoFlags f) if (op == "^") { i ^= f.i; return this; }
+    pragma(inline, true) ref QUrlTwoFlags opOpAssign(string op)(E1 f) if (op == "^") { i ^= f; return this; }
+    pragma(inline, true) ref QUrlTwoFlags opOpAssign(string op)(E2 f) if (op == "^") { i ^= f; return this; }
 
     /+pragma(inline, true) auto opCast(T : QFlags!(E1))() const { return QFlag(i); }+/
     /+pragma(inline, true) auto opCast(T : QFlags!(E2))() const { return QFlag(i); }+/
@@ -83,12 +83,12 @@ public:
     { return QUrlTwoFlags(QFlag(i | f)); }
     pragma(inline, true) QUrlTwoFlags opBinary(string op)(E2 f) const if (op == "|")
     { return QUrlTwoFlags(QFlag(i | f)); }
-    /+pragma(inline, true) QUrlTwoFlags operator ^(QUrlTwoFlags f) const
-    { return QUrlTwoFlags(QFlag(i ^ f.i)); }+/
-    /+pragma(inline, true) QUrlTwoFlags operator ^(E1 f) const
-    { return QUrlTwoFlags(QFlag(i ^ f)); }+/
-    /+pragma(inline, true) QUrlTwoFlags operator ^(E2 f) const
-    { return QUrlTwoFlags(QFlag(i ^ f)); }+/
+    pragma(inline, true) QUrlTwoFlags opBinary(string op)(QUrlTwoFlags f) const if (op == "^")
+    { return QUrlTwoFlags(QFlag(i ^ f.i)); }
+    pragma(inline, true) QUrlTwoFlags opBinary(string op)(E1 f) const if (op == "^")
+    { return QUrlTwoFlags(QFlag(i ^ f)); }
+    pragma(inline, true) QUrlTwoFlags opBinary(string op)(E2 f) const if (op == "^")
+    { return QUrlTwoFlags(QFlag(i ^ f)); }
     pragma(inline, true) QUrlTwoFlags opBinary(string op)(int mask) const if (op == "&")
     { return QUrlTwoFlags(QFlag(i & mask)); }
     pragma(inline, true) QUrlTwoFlags opBinary(string op)(uint mask) const if (op == "&")
@@ -97,8 +97,8 @@ public:
     { return QUrlTwoFlags(QFlag(i & f)); }
     pragma(inline, true) QUrlTwoFlags opBinary(string op)(E2 f) const if (op == "&")
     { return QUrlTwoFlags(QFlag(i & f)); }
-    /+pragma(inline, true) QUrlTwoFlags operator ~() const
-    { return QUrlTwoFlags(QFlag(~i)); }+/
+    pragma(inline, true) QUrlTwoFlags opUnary(string op)() const if (op == "~")
+    { return QUrlTwoFlags(QFlag(~i)); }
 
     pragma(inline, true) bool testFlag(E1 f) const { return (i & f) == f && (f != 0 || i == int(f)); }
     pragma(inline, true) bool testFlag(E2 f) const { return (i & f) == f && (f != 0 || i == int(f)); }
@@ -175,7 +175,7 @@ public:
     else
     {
         this(ref const(QString) url, ParsingMode mode = ParsingMode.TolerantMode);
-        /+ref QUrl operator =(ref const(QString) url);+/
+        ref QUrl opAssign(ref const(QString) url);
     }
     /+ QUrl(QUrl &&other) noexcept : d(other.d)
     { other.d = nullptr; } +/

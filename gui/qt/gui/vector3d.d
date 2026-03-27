@@ -90,20 +90,20 @@ public:
     pragma(inline, true) void setY(float aY) { v[1] = aY; }
     pragma(inline, true) void setZ(float aZ) { v[2] = aZ; }
 
-    /+pragma(inline, true) ref float operator [](int i)
+    pragma(inline, true) ref float opIndex(int i)
     {
         import qt.core.global;
 
         (mixin(Q_ASSERT(q{uint(i) < 3u})));
         return v[i];
-    }+/
-    /+pragma(inline, true) float operator [](int i) const
+    }
+    pragma(inline, true) float opIndex(int i) const
     {
         import qt.core.global;
 
         (mixin(Q_ASSERT(q{uint(i) < 3u})));
         return v[i];
-    }+/
+    }
 
     float length() const;
     float lengthSquared() const;
@@ -111,48 +111,48 @@ public:
     QVector3D normalized() const;
     void normalize();
 
-    /+pragma(inline, true) ref QVector3D operator +=(ref const(QVector3D) vector)
+    pragma(inline, true) ref QVector3D opOpAssign(string op)(ref const(QVector3D) vector) if (op == "+")
     {
         v[0] += vector.v[0];
         v[1] += vector.v[1];
         v[2] += vector.v[2];
         return this;
-    }+/
-    /+pragma(inline, true) ref QVector3D operator -=(ref const(QVector3D) vector)
+    }
+    pragma(inline, true) ref QVector3D opOpAssign(string op)(ref const(QVector3D) vector) if (op == "-")
     {
         v[0] -= vector.v[0];
         v[1] -= vector.v[1];
         v[2] -= vector.v[2];
         return this;
-    }+/
-    /+pragma(inline, true) ref QVector3D operator *=(float factor)
+    }
+    pragma(inline, true) ref QVector3D opOpAssign(string op)(float factor) if (op == "*")
     {
         v[0] *= factor;
         v[1] *= factor;
         v[2] *= factor;
         return this;
-    }+/
-    /+pragma(inline, true) ref QVector3D operator *=(ref const(QVector3D) vector)
+    }
+    pragma(inline, true) ref QVector3D opOpAssign(string op)(ref const(QVector3D) vector) if (op == "*")
     {
         v[0] *= vector.v[0];
         v[1] *= vector.v[1];
         v[2] *= vector.v[2];
         return this;
-    }+/
-    /+pragma(inline, true) ref QVector3D operator /=(float divisor)
+    }
+    pragma(inline, true) ref QVector3D opOpAssign(string op)(float divisor) if (op == "/")
     {
         v[0] /= divisor;
         v[1] /= divisor;
         v[2] /= divisor;
         return this;
-    }+/
-    /+pragma(inline, true) ref QVector3D operator /=(ref const(QVector3D) vector)
+    }
+    pragma(inline, true) ref QVector3D opOpAssign(string op)(ref const(QVector3D) vector) if (op == "/")
     {
         v[0] /= vector.v[0];
         v[1] /= vector.v[1];
         v[2] /= vector.v[2];
         return this;
-    }+/
+    }
 
     static float dotProduct(ref const(QVector3D) v1, ref const(QVector3D) v2); //In Qt 6 convert to inline and constexpr
     static QVector3D crossProduct(ref const(QVector3D) v1, ref const(QVector3D) v2); //in Qt 6 convert to inline and constexpr

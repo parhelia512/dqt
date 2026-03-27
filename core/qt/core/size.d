@@ -90,14 +90,14 @@ public:
     { wd+=s.wd; ht+=s.ht; return this; }
     pragma(inline, true) ref QSize opOpAssign(string op)(ref const(QSize) s) nothrow if (op == "-")
     { wd-=s.wd; ht-=s.ht; return this; }
-    /+pragma(inline, true) ref QSize operator *=(qreal c) nothrow
-    { wd = qRound(wd*c); ht = qRound(ht*c); return this; }+/
-    /+pragma(inline, true) ref QSize operator /=(qreal c)
+    pragma(inline, true) ref QSize opOpAssign(string op)(qreal c) nothrow if (op == "*")
+    { wd = qRound(wd*c); ht = qRound(ht*c); return this; }
+    pragma(inline, true) ref QSize opOpAssign(string op)(qreal c) if (op == "/")
     {
         (mixin(Q_ASSERT(q{!qFuzzyIsNull(c)})));
         wd = qRound(wd/c); ht = qRound(ht/c);
         return this;
-    }+/
+    }
 
     /+ friend inline bool operator==(const QSize &, const QSize &) noexcept; +/
     /+ friend inline bool operator!=(const QSize &, const QSize &) noexcept; +/
@@ -233,14 +233,14 @@ public:
     { wd += s.wd; ht += s.ht; return this; }
     pragma(inline, true) ref QSizeF opOpAssign(string op)(ref const(QSizeF) s) nothrow if (op == "-")
     { wd -= s.wd; ht -= s.ht; return this; }
-    /+pragma(inline, true) ref QSizeF operator *=(qreal c) nothrow
-    { wd *= c; ht *= c; return this; }+/
-    /+pragma(inline, true) ref QSizeF operator /=(qreal c)
+    pragma(inline, true) ref QSizeF opOpAssign(string op)(qreal c) nothrow if (op == "*")
+    { wd *= c; ht *= c; return this; }
+    pragma(inline, true) ref QSizeF opOpAssign(string op)(qreal c) if (op == "/")
     {
         (mixin(Q_ASSERT(q{!qFuzzyIsNull(c)})));
         wd = wd/c; ht = ht/c;
         return this;
-    }+/
+    }
 
     /+ friend inline bool operator==(const QSizeF &, const QSizeF &) noexcept; +/
     /+ friend inline bool operator!=(const QSizeF &, const QSizeF &) noexcept; +/

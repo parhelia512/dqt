@@ -12,6 +12,8 @@
 module qt.config;
 
 enum QT_STRINGVIEW_LEVEL = 1;
+version (Windows)
+    enum Q_COMPILER_MANGLES_RETURN_TYPE = 1;
 
 template defined(string name)
 {

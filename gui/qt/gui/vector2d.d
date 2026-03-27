@@ -84,20 +84,20 @@ public:
     pragma(inline, true) void setX(float aX) { v[0] = aX; }
     pragma(inline, true) void setY(float aY) { v[1] = aY; }
 
-    /+pragma(inline, true) ref float operator [](int i)
+    pragma(inline, true) ref float opIndex(int i)
     {
         import qt.core.global;
 
         (mixin(Q_ASSERT(q{uint(i) < 2u})));
         return v[i];
-    }+/
-    /+pragma(inline, true) float operator [](int i) const
+    }
+    pragma(inline, true) float opIndex(int i) const
     {
         import qt.core.global;
 
         (mixin(Q_ASSERT(q{uint(i) < 2u})));
         return v[i];
-    }+/
+    }
 
     float length() const;
     float lengthSquared() const; //In Qt 6 convert to inline and constexpr
@@ -108,42 +108,42 @@ public:
     float distanceToPoint(ref const(QVector2D) point) const;
     float distanceToLine(ref const(QVector2D) point, ref const(QVector2D) direction) const;
 
-    /+pragma(inline, true) ref QVector2D operator +=(ref const(QVector2D) vector)
+    pragma(inline, true) ref QVector2D opOpAssign(string op)(ref const(QVector2D) vector) if (op == "+")
     {
         v[0] += vector.v[0];
         v[1] += vector.v[1];
         return this;
-    }+/
-    /+pragma(inline, true) ref QVector2D operator -=(ref const(QVector2D) vector)
+    }
+    pragma(inline, true) ref QVector2D opOpAssign(string op)(ref const(QVector2D) vector) if (op == "-")
     {
         v[0] -= vector.v[0];
         v[1] -= vector.v[1];
         return this;
-    }+/
-    /+pragma(inline, true) ref QVector2D operator *=(float factor)
+    }
+    pragma(inline, true) ref QVector2D opOpAssign(string op)(float factor) if (op == "*")
     {
         v[0] *= factor;
         v[1] *= factor;
         return this;
-    }+/
-    /+pragma(inline, true) ref QVector2D operator *=(ref const(QVector2D) vector)
+    }
+    pragma(inline, true) ref QVector2D opOpAssign(string op)(ref const(QVector2D) vector) if (op == "*")
     {
         v[0] *= vector.v[0];
         v[1] *= vector.v[1];
         return this;
-    }+/
-    /+pragma(inline, true) ref QVector2D operator /=(float divisor)
+    }
+    pragma(inline, true) ref QVector2D opOpAssign(string op)(float divisor) if (op == "/")
     {
         v[0] /= divisor;
         v[1] /= divisor;
         return this;
-    }+/
-    /+pragma(inline, true) ref QVector2D operator /=(ref const(QVector2D) vector)
+    }
+    pragma(inline, true) ref QVector2D opOpAssign(string op)(ref const(QVector2D) vector) if (op == "/")
     {
         v[0] /= vector.v[0];
         v[1] /= vector.v[1];
         return this;
-    }+/
+    }
 
     static float dotProduct(ref const(QVector2D) v1, ref const(QVector2D) v2); //In Qt 6 convert to inline and constexpr
 

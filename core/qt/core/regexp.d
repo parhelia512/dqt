@@ -64,7 +64,7 @@ public:
     @disable this(this);
     this(ref const(QRegExp) rx);
     ~this();
-    /+ref QRegExp operator =(ref const(QRegExp) rx);+/
+    ref QRegExp opAssign(ref const(QRegExp) rx);
     /+ QRegExp &operator=(QRegExp &&other) noexcept { swap(other); return *this; } +/
     /+ void swap(QRegExp &other) noexcept { qSwap(priv, other.priv); } +/
 

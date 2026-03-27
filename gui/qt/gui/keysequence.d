@@ -170,8 +170,8 @@ public:
     QT_DEPRECATED operator int() const { if (1 <= count()) return operator [](0); return 0; }
 #endif +/
     /+auto opCast(T : QVariant)() const;+/
-    /+int operator [](uint i) const;+/
-    /+ref QKeySequence operator =(ref const(QKeySequence) other);+/
+    int opIndex(uint i) const;
+    ref QKeySequence opAssign(ref const(QKeySequence) other);
     /+ QKeySequence &operator=(QKeySequence &&other) noexcept { swap(other); return *this; } +/
     /+ void swap(QKeySequence &other) noexcept { qSwap(d, other.d); } +/
 

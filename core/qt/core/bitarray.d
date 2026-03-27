@@ -82,8 +82,8 @@ public:
 
     ref QBitArray opOpAssign(string op)(ref const(QBitArray) ) if (op == "&");
     ref QBitArray opOpAssign(string op)(ref const(QBitArray) ) if (op == "|");
-    /+ref QBitArray operator ^=(ref const(QBitArray) );+/
-    /+QBitArray  operator ~() const;+/
+    ref QBitArray opOpAssign(string op)(ref const(QBitArray) ) if (op == "^");
+    QBitArray  opUnary(string op)() const if (op == "~");
 
     /+pragma(inline, true) bool operator ==(ref const(QBitArray) other) const { return d == other.d; }+/
     /+pragma(inline, true) bool operator !=(ref const(QBitArray) other) const { return d != other.d; }+/

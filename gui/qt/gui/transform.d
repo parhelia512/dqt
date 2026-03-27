@@ -180,8 +180,8 @@ public:
     /+bool operator ==(ref const(QTransform) ) const;+/
     /+bool operator !=(ref const(QTransform) ) const;+/
 
-    /+ref QTransform operator *=(ref const(QTransform) );+/
-    /+QTransform operator *(ref const(QTransform) o) const;+/
+    ref QTransform opOpAssign(string op)(ref const(QTransform) ) if (op == "*");
+    QTransform opBinary(string op)(ref const(QTransform) o) const if (op == "*");
 
     /+auto opCast(T : QVariant)() const;+/
 
@@ -204,7 +204,7 @@ public:
     ref const(QMatrix) toAffine() const;
 /+ #endif +/ // QT_DEPRECATED_SINCE(5, 15)
 
-    /+pragma(inline, true) ref QTransform operator *=(qreal num)
+    pragma(inline, true) ref QTransform opOpAssign(string op)(qreal num) if (op == "*")
     {
         if (num == 1.)
             return this;
@@ -220,14 +220,14 @@ public:
         if (m_dirty < TransformationType.TxScale)
             m_dirty = TransformationType.TxScale;
         return this;
-    }+/
-    /+pragma(inline, true) ref QTransform operator /=(qreal div)
+    }
+    /*pragma(inline, true) ref QTransform opOpAssign(string op)(qreal div) if (op == "/")
     {
         if (div == 0)
             return this;
         div = 1/div;
-        return operator*=(div);
-    }+/
+        return opOpAssign!"*"(div);
+    }*/
     pragma(inline, true) ref QTransform opOpAssign(string op)(qreal num) if (op == "+")
     {
         if (num == 0)
