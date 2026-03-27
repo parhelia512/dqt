@@ -185,9 +185,9 @@ public:
     T opOpAssign(string op)(T v) nothrow if (op == "&")
     { return fetchAndAndOrdered(v) & v; }
     T opOpAssign(string op)(T v) nothrow if (op == "|")
-    { return fetchAndOrOrdered(v) | v; }*/
-    /+T operator ^=(T v) nothrow
-    { return fetchAndXorOrdered(v) ^ v; }+/
+    { return fetchAndOrOrdered(v) | v; }
+    T opOpAssign(string op)(T v) nothrow if (op == "^")
+    { return fetchAndXorOrdered(v) ^ v; }*/
 
 
 /+ #ifdef QT_BASIC_ATOMIC_HAS_CONSTRUCTORS

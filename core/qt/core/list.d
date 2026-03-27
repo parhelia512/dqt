@@ -191,10 +191,10 @@ public:
         }
         else
         {
-            /+pragma(inline, true) ref iterator operator +=(qsizetype j) { i += j; return this; }+/
-            /+pragma(inline, true) ref iterator operator -=(qsizetype j) { i -= j; return this; }+/
-            /+pragma(inline, true) iterator operator +(qsizetype j) const { return iterator(i + j); }+/
-            /+pragma(inline, true) iterator operator -(qsizetype j) const { return iterator(i - j); }+/
+            pragma(inline, true) ref iterator opOpAssign(string op)(qsizetype j) if (op == "+") { i += j; return this; }
+            pragma(inline, true) ref iterator opOpAssign(string op)(qsizetype j) if (op == "-") { i -= j; return this; }
+            pragma(inline, true) iterator opBinary(string op)(qsizetype j) const if (op == "+") { return iterator(i + j); }
+            pragma(inline, true) iterator opBinary(string op)(qsizetype j) const if (op == "-") { return iterator(i - j); }
             /+ friend inline iterator operator+(qsizetype j, iterator k) { return k + j; } +/
         }
         pragma(inline, true) iterator opBinary(string op)(qsizetype j) if (op == "+") { return iterator(i+j); }
@@ -281,10 +281,10 @@ public:
         }
         else
         {
-            /+pragma(inline, true) ref const_iterator operator +=(qsizetype j) { i += j; return this; }+/
-            /+pragma(inline, true) ref const_iterator operator -=(qsizetype j) { i -= j; return this; }+/
-            /+pragma(inline, true) const_iterator operator +(qsizetype j) const { return const_iterator(i + j); }+/
-            /+pragma(inline, true) const_iterator operator -(qsizetype j) const { return const_iterator(i - j); }+/
+            pragma(inline, true) ref const_iterator opOpAssign(string op)(qsizetype j) if (op == "+") { i += j; return this; }
+            pragma(inline, true) ref const_iterator opOpAssign(string op)(qsizetype j) if (op == "-") { i -= j; return this; }
+            pragma(inline, true) const_iterator opBinary(string op)(qsizetype j) const if (op == "+") { return const_iterator(i + j); }
+            pragma(inline, true) const_iterator opBinary(string op)(qsizetype j) const if (op == "-") { return const_iterator(i - j); }
             /+ friend inline const_iterator operator+(qsizetype j, const_iterator k) { return k + j; } +/
         }
         int opCmp(const const_iterator other) const
@@ -933,8 +933,8 @@ public:
     { this += l; return this; }+/
     /+ inline QList<T> &operator<<(QList<T> &&l)
     { *this += std::move(l); return *this; } +/
-    /+extern(D) pragma(inline, true) ref QList!(T) opOpAssign(string op)(rvalue_ref t) if (op == "~")
-    { append(/+ std:: +/move(t)); return this; }+/
+    /*extern(D) pragma(inline, true) ref QList!(T) opOpAssign(string op)(rvalue_ref t) if (op == "~")
+    { append(/+ std:: +/move(t)); return this; }*/
     /+pragma(inline, true) ref QList!(T) operator <<(rvalue_ref t)
     { append(/+ std:: +/move(t)); return this; }+/
 

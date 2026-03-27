@@ -85,7 +85,7 @@ public:
     @disable this(this);
     this(ref const(QCursor) cursor);
     ~this();
-    /+ref QCursor operator =(ref const(QCursor) cursor);+/
+    ref QCursor opAssign(ref const(QCursor) cursor);
     /+ QCursor(QCursor &&other) noexcept : d(qExchange(other.d, nullptr)) {} +/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QCursor) +/
 

@@ -121,7 +121,7 @@ public:
     QRegion opBinary(string op)(ref const(QRegion) r) const if (op == "&");
     QRegion opBinary(string op)(ref const(QRect) r) const if (op == "&");
     QRegion opBinary(string op)(ref const(QRegion) r) const if (op == "-");
-    /+QRegion operator ^(ref const(QRegion) r) const;+/
+    QRegion opBinary(string op)(ref const(QRegion) r) const if (op == "^");
 
     ref QRegion opOpAssign(string op)(ref const(QRegion) r) if (op == "|");
     ref QRegion opOpAssign(string op)(ref const(QRegion) r) if (op == "+");
@@ -129,7 +129,7 @@ public:
     ref QRegion opOpAssign(string op)(ref const(QRegion) r) if (op == "&");
     ref QRegion opOpAssign(string op)(ref const(QRect) r) if (op == "&");
     ref QRegion opOpAssign(string op)(ref const(QRegion) r) if (op == "-");
-    /+ref QRegion operator ^=(ref const(QRegion) r);+/
+    ref QRegion opOpAssign(string op)(ref const(QRegion) r) if (op == "^");
 
     /+bool operator ==(ref const(QRegion) r) const;+/
     /+pragma(inline, true) bool operator !=(ref const(QRegion) r) const { return !(operator==(r)); }+/

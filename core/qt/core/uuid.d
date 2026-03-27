@@ -158,11 +158,11 @@ public:
                             guid.Data4[4], guid.Data4[5], guid.Data4[6], guid.Data4[7]];
         }
 
-        /+ref QUuid operator =(ref const(GUID) guid) nothrow
+        ref QUuid opAssign(ref const(GUID) guid) nothrow
         {
             this = QUuid(guid);
             return this;
-        }+/
+        }
 
         /+auto opCast(T : GUID)() const nothrow
         {

@@ -89,31 +89,31 @@ public:
         return this;
     }
 
-    /+pragma(inline, true) ref QPoint operator *=(float factor)
+    pragma(inline, true) ref QPoint opOpAssign(string op)(float factor) if (op == "*")
     {
         xp = qRound(xp * factor);
         yp = qRound(yp * factor);
         return this;
-    }+/
-    /+pragma(inline, true) ref QPoint operator *=(double factor)
+    }
+    pragma(inline, true) ref QPoint opOpAssign(string op)(double factor) if (op == "*")
     {
         xp = qRound(xp * factor);
         yp = qRound(yp * factor);
         return this;
-    }+/
-    /+pragma(inline, true) ref QPoint operator *=(int factor)
+    }
+    pragma(inline, true) ref QPoint opOpAssign(string op)(int factor) if (op == "*")
     {
         xp = xp * factor;
         yp = yp * factor;
         return this;
-    }+/
+    }
 
-    /+pragma(inline, true) ref QPoint operator /=(qreal c)
+    pragma(inline, true) ref QPoint opOpAssign(string op)(qreal c) if (op == "/")
     {
         xp = qRound(xp / c);
         yp = qRound(yp / c);
         return this;
-    }+/
+    }
 
     pragma(inline, true) static int dotProduct(ref const(QPoint) p1, ref const(QPoint) p2)
     { return p1.xp * p2.xp + p1.yp * p2.yp; }
@@ -271,19 +271,19 @@ public:
         yp -= p.yp;
         return this;
     }
-    /+pragma(inline, true) ref QPointF operator *=(qreal c)
+    pragma(inline, true) ref QPointF opOpAssign(string op)(qreal c) if (op == "*")
     {
         xp *= c;
         yp *= c;
         return this;
-    }+/
-    /+pragma(inline, true) ref QPointF operator /=(qreal divisor)
+    }
+    pragma(inline, true) ref QPointF opOpAssign(string op)(qreal divisor) if (op == "/")
     {
         (mixin(Q_ASSERT(q{divisor > 0 || divisor < 0})));
         xp /= divisor;
         yp /= divisor;
         return this;
-    }+/
+    }
 
     pragma(inline, true) static qreal dotProduct(ref const(QPointF) p1, ref const(QPointF) p2) nothrow
     {

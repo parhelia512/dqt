@@ -88,26 +88,26 @@ public:
         m_bottom -= margin;
         return this;
     }
-    /+pragma(inline, true) ref QMargins operator *=(int factor) nothrow
+    /*pragma(inline, true) ref QMargins opOpAssign(string op)(int factor) nothrow if (op == "*")
     {
         return (){return this = this * factor;
     }();
-    }+/
-    /+pragma(inline, true) ref QMargins operator /=(int divisor)
+    }
+    pragma(inline, true) ref QMargins opOpAssign(string op)(int divisor) if (op == "/")
     {
         return (){return this = this / divisor;
     }();
-    }+/
-    /+pragma(inline, true) ref QMargins operator *=(qreal factor) nothrow
+    }
+    pragma(inline, true) ref QMargins opOpAssign(string op)(qreal factor) nothrow if (op == "*")
     {
         return (){return this = this * factor;
     }();
-    }+/
-    /+pragma(inline, true) ref QMargins operator /=(qreal divisor)
+    }
+    pragma(inline, true) ref QMargins opOpAssign(string op)(qreal divisor) if (op == "/")
     {
         return (){return this = this / divisor;
     }();
-    }+/
+    }*/
 
     /+ [[nodiscard]] +/ pragma(inline, true) QMarginsF toMarginsF() const nothrow { return QMarginsF(this); }
 
@@ -327,16 +327,16 @@ public:
         m_bottom -= subtrahend;
         return this;
     }
-    /+pragma(inline, true) ref QMarginsF operator *=(qreal factor) nothrow
+    /*pragma(inline, true) ref QMarginsF opOpAssign(string op)(qreal factor) nothrow if (op == "*")
     {
         return (){return this = this * factor;
     }();
-    }+/
-    /+pragma(inline, true) ref QMarginsF operator /=(qreal divisor)
+    }
+    pragma(inline, true) ref QMarginsF opOpAssign(string op)(qreal divisor) if (op == "/")
     {
         return (){return this = this / divisor;
     }();
-    }+/
+    }*/
 
     pragma(inline, true) QMargins toMargins() const nothrow
     {

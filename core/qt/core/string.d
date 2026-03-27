@@ -1216,11 +1216,11 @@ public:
         /+ template <qsizetype N> +/
         this(qsizetype N)(ref char[N] ) /+ = delete +/;
         /+ template <qsizetype N> +/
-        /+pragma(inline, true) ref QString operator =(qsizetype N)(ref const(char)[N] ch)
+        pragma(inline, true) ref QString opAssign(qsizetype N)(ref const(char)[N] ch)
         { return ((){return this = fromUtf8(ch.ptr, N - 1);
-    }()); }+/
+    }()); }
         /+ template <qsizetype N> +/
-        /+ref QString operator =(qsizetype N)(ref char[N] ) /+ = delete +/;+/
+        ref QString opAssign(qsizetype N)(ref char[N] ) /+ = delete +/;
     }
 /+ #endif
 #if !defined(QT_NO_CAST_FROM_ASCII) && !defined(QT_RESTRICTED_CAST_FROM_ASCII)

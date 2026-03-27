@@ -77,7 +77,7 @@ public:
     QRect boundingRect() const;
     void setBoundingRect(ref const(QRect) r);
 
-    /+ref QPicture operator =(ref const(QPicture) p);+/
+    ref QPicture opAssign(ref const(QPicture) p);
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QPicture) +/
     /+ inline void swap(QPicture &other) noexcept
     { d_ptr.swap(other.d_ptr); } +/

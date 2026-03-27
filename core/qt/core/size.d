@@ -98,19 +98,19 @@ public:
         ht -= s.ht;
         return this;
     }
-    /+pragma(inline, true) ref QSize operator *=(qreal c) nothrow
+    pragma(inline, true) ref QSize opOpAssign(string op)(qreal c) nothrow if (op == "*")
     {
         wd = qRound(wd * c);
         ht = qRound(ht * c);
         return this;
-    }+/
-    /+pragma(inline, true) ref QSize operator /=(qreal c)
+    }
+    pragma(inline, true) ref QSize opOpAssign(string op)(qreal c) if (op == "/")
     {
         (mixin(Q_ASSERT(q{!qFuzzyIsNull(c)})));
         wd = qRound(wd / c);
         ht = qRound(ht / c);
         return this;
-    }+/
+    }
 
     /+ friend inline constexpr bool operator==(const QSize &s1, const QSize &s2) noexcept
     { return s1.wd == s2.wd && s1.ht == s2.ht; } +/
@@ -255,13 +255,13 @@ public:
         ht -= s.ht;
         return this;
     }
-    /+pragma(inline, true) ref QSizeF operator *=(qreal c) nothrow
+    pragma(inline, true) ref QSizeF opOpAssign(string op)(qreal c) nothrow if (op == "*")
     {
         wd *= c;
         ht *= c;
         return this;
-    }+/
-    /+pragma(inline, true) ref QSizeF operator /=(qreal c)
+    }
+    /*pragma(inline, true) ref QSizeF opOpAssign(string op)(qreal c) if (op == "/")
     {
         import qt.core.numeric;
 
@@ -269,7 +269,7 @@ public:
         wd = wd / c;
         ht = ht / c;
         return this;
-    }+/
+    }*/
 
     /+ QT_WARNING_PUSH
     QT_WARNING_DISABLE_FLOAT_COMPARE +/

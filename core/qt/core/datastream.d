@@ -219,7 +219,7 @@ public:
 private:
     /+ Q_DISABLE_COPY(QDataStream) +/
 @disable this(this);
-/+@disable this(ref const(QDataStream));+//+@disable ref QDataStream operator =(ref const(QDataStream));+/
+/+@disable this(ref const(QDataStream));+/@disable ref QDataStream opAssign(ref const(QDataStream));
     QScopedPointer!(QDataStreamPrivate) d;
 
     QIODevice dev;

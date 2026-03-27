@@ -130,15 +130,15 @@ public:
 
     static if (!defined!"QT_TYPESAFE_FLAGS")
     {
-        /+pragma(inline, true) ref QFlags operator &=(int mask) nothrow { i &= mask; return this; }+/
-        /+pragma(inline, true) ref QFlags operator &=(uint mask) nothrow { i &= mask; return this; }+/
+        pragma(inline, true) ref QFlags opOpAssign(string op)(int mask) nothrow if (op == "&") { i &= mask; return this; }
+        pragma(inline, true) ref QFlags opOpAssign(string op)(uint mask) nothrow if (op == "&") { i &= mask; return this; }
     }
     pragma(inline, true) ref QFlags opOpAssign(string op)(QFlags mask) nothrow if (op == "&") { i &= mask.i; return this; }
     pragma(inline, true) ref QFlags opOpAssign(string op)(Enum mask) nothrow if (op == "&") { i &= Int(mask); return this; }
     pragma(inline, true) ref QFlags opOpAssign(string op)(QFlags other) nothrow if (op == "|") { i |= other.i; return this; }
     pragma(inline, true) ref QFlags opOpAssign(string op)(Enum other) nothrow if (op == "|") { i |= Int(other); return this; }
-    /+pragma(inline, true) ref QFlags operator ^=(QFlags other) nothrow { i ^= other.i; return this; }+/
-    /+pragma(inline, true) ref QFlags operator ^=(Enum other) nothrow { i ^= Int(other); return this; }+/
+    pragma(inline, true) ref QFlags opOpAssign(string op)(QFlags other) nothrow if (op == "^") { i ^= other.i; return this; }
+    pragma(inline, true) ref QFlags opOpAssign(string op)(Enum other) nothrow if (op == "^") { i ^= Int(other); return this; }
 
     static if (defined!"QT_TYPESAFE_FLAGS")
     {
@@ -160,12 +160,12 @@ public:
 
     pragma(inline, true) QFlags opBinary(string op)(QFlags other) const nothrow if (op == "|") { return QFlags(QFlag(i | other.i)); }
     pragma(inline, true) QFlags opBinary(string op)(Enum other) const nothrow if (op == "|") { return QFlags(QFlag(i | Int(other))); }
-    /+pragma(inline, true) QFlags operator ^(QFlags other) const nothrow { return QFlags(QFlag(i ^ other.i)); }+/
-    /+pragma(inline, true) QFlags operator ^(Enum other) const nothrow { return QFlags(QFlag(i ^ Int(other))); }+/
+    pragma(inline, true) QFlags opBinary(string op)(QFlags other) const nothrow if (op == "^") { return QFlags(QFlag(i ^ other.i)); }
+    pragma(inline, true) QFlags opBinary(string op)(Enum other) const nothrow if (op == "^") { return QFlags(QFlag(i ^ Int(other))); }
     static if (!defined!"QT_TYPESAFE_FLAGS")
     {
-        /+pragma(inline, true) QFlags operator &(int mask) const nothrow { return QFlags(QFlag(i & mask)); }+/
-        /+pragma(inline, true) QFlags operator &(uint mask) const nothrow { return QFlags(QFlag(i & mask)); }+/
+        pragma(inline, true) QFlags opBinary(string op)(int mask) const nothrow if (op == "&") { return QFlags(QFlag(i & mask)); }
+        pragma(inline, true) QFlags opBinary(string op)(uint mask) const nothrow if (op == "&") { return QFlags(QFlag(i & mask)); }
     }
     pragma(inline, true) QFlags opBinary(string op)(QFlags other) const nothrow if (op == "&") { return QFlags(QFlag(i & other.i)); }
     pragma(inline, true) QFlags opBinary(string op)(Enum other) const nothrow if (op == "&") { return QFlags(QFlag(i & Int(other))); }

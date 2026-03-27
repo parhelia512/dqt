@@ -58,7 +58,7 @@ alias GlyphRunFlags = QFlags!(GlyphRunFlag);
     @disable this(this);
     this(ref const(QGlyphRun) other);
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QGlyphRun) +/
-    /+ref QGlyphRun operator =(ref const(QGlyphRun) other);+/
+    ref QGlyphRun opAssign(ref const(QGlyphRun) other);
     ~this();
 
     /+ void swap(QGlyphRun &other) noexcept { d.swap(other.d); } +/
@@ -107,8 +107,8 @@ private:
     /+ friend class QGlyphRunPrivate; +/
     /+ friend class QTextLine; +/
 
-    /+QGlyphRun operator +(ref const(QGlyphRun) other) const;+/
-    /+ref QGlyphRun operator +=(ref const(QGlyphRun) other);+/
+    /*QGlyphRun opBinary(string op)(ref const(QGlyphRun) other) const if (op == "+");
+    ref QGlyphRun opOpAssign(string op)(ref const(QGlyphRun) other) if (op == "+");*/
 
     void detach();
     QExplicitlySharedDataPointer!(QGlyphRunPrivate) d;

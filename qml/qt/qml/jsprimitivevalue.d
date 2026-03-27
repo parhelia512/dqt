@@ -369,14 +369,14 @@ public:
         return +other; // We still need to coerce the original value.
     }+/
 
-    /+QJSPrimitiveValue operator +()
+    /+QJSPrimitiveValue opUnary(string op)() if (op == "+")
     {
         // +a is modeled as a -= 0. That should force it to number.
         return ((){return this = operate!(SubOperators)(this, cast(ref const(QJSPrimitiveValue)) (0));
 }());
     }+/
 
-    /+QJSPrimitiveValue operator -()
+    /+QJSPrimitiveValue opUnary(string op)() if (op == "-")
     {
         return ((){return this = operate!(MulOperators)(this, cast(ref const(QJSPrimitiveValue)) (-1));
 }());

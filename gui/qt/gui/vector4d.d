@@ -103,20 +103,20 @@ public:
     pragma(inline, true) void setZ(float aZ) nothrow { v[2] = aZ; }
     pragma(inline, true) void setW(float aW) nothrow { v[3] = aW; }
 
-    /+pragma(inline, true) ref float operator [](int i)
+    pragma(inline, true) ref float opIndex(int i)
     {
         import qt.core.global;
 
         (mixin(Q_ASSERT(q{uint(i) < 4u})));
         return v[i];
-    }+/
-    /+pragma(inline, true) float operator [](int i) const
+    }
+    pragma(inline, true) float opIndex(int i) const
     {
         import qt.core.global;
 
         (mixin(Q_ASSERT(q{uint(i) < 4u})));
         return v[i];
-    }+/
+    }
 
     /+ /+ [[nodiscard]] +/ pragma(inline, true) float length() const nothrow
     {
@@ -149,39 +149,39 @@ public:
         v[3] /= len;
     } +/
 
-    /+pragma(inline, true) ref QVector4D operator +=(QVector4D vector) nothrow
+    pragma(inline, true) ref QVector4D opOpAssign(string op)(QVector4D vector) nothrow if (op == "+")
     {
         v[0] += vector.v[0];
         v[1] += vector.v[1];
         v[2] += vector.v[2];
         v[3] += vector.v[3];
         return this;
-    }+/
-    /+pragma(inline, true) ref QVector4D operator -=(QVector4D vector) nothrow
+    }
+    pragma(inline, true) ref QVector4D opOpAssign(string op)(QVector4D vector) nothrow if (op == "-")
     {
         v[0] -= vector.v[0];
         v[1] -= vector.v[1];
         v[2] -= vector.v[2];
         v[3] -= vector.v[3];
         return this;
-    }+/
-    /+pragma(inline, true) ref QVector4D operator *=(float factor) nothrow
+    }
+    pragma(inline, true) ref QVector4D opOpAssign(string op)(float factor) nothrow if (op == "*")
     {
         v[0] *= factor;
         v[1] *= factor;
         v[2] *= factor;
         v[3] *= factor;
         return this;
-    }+/
-    /+pragma(inline, true) ref QVector4D operator *=(QVector4D vector) nothrow
+    }
+    pragma(inline, true) ref QVector4D opOpAssign(string op)(QVector4D vector) nothrow if (op == "*")
     {
         v[0] *= vector.v[0];
         v[1] *= vector.v[1];
         v[2] *= vector.v[2];
         v[3] *= vector.v[3];
         return this;
-    }+/
-    /+pragma(inline, true) ref QVector4D operator /=(float divisor)
+    }
+    pragma(inline, true) ref QVector4D opOpAssign(string op)(float divisor) if (op == "/")
     {
         import qt.core.global;
 
@@ -191,8 +191,8 @@ public:
         v[2] /= divisor;
         v[3] /= divisor;
         return this;
-    }+/
-    /+pragma(inline, true) ref QVector4D operator /=(QVector4D vector)
+    }
+    pragma(inline, true) ref QVector4D opOpAssign(string op)(QVector4D vector) if (op == "/")
     {
         import qt.core.global;
 
@@ -205,7 +205,7 @@ public:
         v[2] /= vector.v[2];
         v[3] /= vector.v[3];
         return this;
-    }+/
+    }
 
     /+ [[nodiscard]] +/ static float dotProduct(QVector4D v1, QVector4D v2) nothrow
     {
