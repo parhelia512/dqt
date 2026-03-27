@@ -193,7 +193,7 @@ public:
         d = null;
     }
 
-    /+pragma(inline, true) auto opCast(T : bool) () const { return d !is null; }+/
+    pragma(inline, true) auto opCast(T : bool) () const { return d !is null; }
 
     /+pragma(inline, true) bool operator ==(ref const(QExplicitlySharedDataPointer!(T)) other) const { return d == other.d; }+/
     /+pragma(inline, true) bool operator !=(ref const(QExplicitlySharedDataPointer!(T)) other) const { return d != other.d; }+/

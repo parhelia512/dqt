@@ -479,7 +479,7 @@ alias Base64Options = QFlags!(Base64Option);
             qSwap(decodingStatus, other.decodingStatus);
         } +/
 
-        /+/+ explicit +/ auto opCast(T : bool)() const nothrow { return decodingStatus == QByteArray.Base64DecodingStatus.Ok; }+/
+        /+ explicit +/ auto opCast(T : bool)() const nothrow { return decodingStatus == QByteArray.Base64DecodingStatus.Ok; }
 
     /+ #if defined(Q_COMPILER_REF_QUALIFIERS) && !defined(Q_QDOC) +/
         ref QByteArray opUnary(string op)()/+ & +/nothrow if (op == "*") { return decoded; }

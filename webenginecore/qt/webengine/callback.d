@@ -83,7 +83,7 @@ public:
     }
     /+this() {}+/
     /+ void swap(QWebEngineCallback &other) Q_DECL_NOTHROW { qSwap(d, other.d); } +/
-    /+auto opCast(T : bool)() const { return cast(bool) (d); }+/
+    auto opCast(T : bool)() const { return cast(bool) (d); }
 
 private:
     /+ friend class QtWebEngineCore::CallbackDirectory; +/

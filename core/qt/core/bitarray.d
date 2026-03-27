@@ -120,7 +120,7 @@ private:
     /+ friend class QBitArray; +/
 public:
     /+ QBitRef(const QBitRef &) = default; +/
-    /+pragma(inline, true) auto opCast(T : bool)() const { return a.testBit(i); }+/
+    pragma(inline, true) auto opCast(T : bool)() const { return a.testBit(i); }
     /+pragma(inline, true) bool operator !() const { return !a.testBit(i); }+/
     /+ref QBitRef opAssign(ref const(QBitRef) val) { a.setBit(i, val); return this; }+/
     ref QBitRef opAssign(bool val) { a.setBit(i, val); return this; }
