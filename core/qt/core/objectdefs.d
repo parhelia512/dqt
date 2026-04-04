@@ -47,26 +47,43 @@ version (QT_NO_TRANSLATION) {} else
 
 /+ Q_CORE_EXPORT +/ const(char)* qFlagLocation(const(char)* method);
 
-/+ #ifndef QT_NO_META_MACROS
-# define QMETHOD_CODE  0                        // member type codes
-# define QSLOT_CODE    1
-# define QSIGNAL_CODE  2
-# define QT_PREFIX_CODE(code, a) QT_STRINGIFY(code) #a
+/+ #ifndef QT_NO_META_MACROS +/
+/+ # define QMETHOD_CODE  0                        // member type codes
+# define QSLOT_CODE    1 +/
+/+ # define QSIGNAL_CODE  2 +/
+enum QSIGNAL_CODE =  2;
+/+ # define QT_PREFIX_CODE(code, a) QT_STRINGIFY(code) #a
 # define QT_STRINGIFY_METHOD(a) QT_PREFIX_CODE(QMETHOD_CODE, a)
 # define QT_STRINGIFY_SLOT(a) QT_PREFIX_CODE(QSLOT_CODE, a)
-# define QT_STRINGIFY_SIGNAL(a) QT_PREFIX_CODE(QSIGNAL_CODE, a)
-# ifndef QT_NO_DEBUG
-#  define QLOCATION "\0" __FILE__ ":" QT_STRINGIFY(__LINE__)
-#  ifndef QT_NO_KEYWORDS
+# define QT_STRINGIFY_SIGNAL(a) QT_PREFIX_CODE(QSIGNAL_CODE, a) +/
+version (QT_NO_DEBUG) {} else
+{
+/+ #  define QLOCATION "\0" __FILE__ ":" QT_STRINGIFY(__LINE__) +/
+extern(D) alias QLOCATION = function string(string file = __FILE__, size_t line = __LINE__)
+{
+    import std.conv : text;
+    return mixin(interpolateMixin(q{"\0" ~ $(stringifyMacroParameter(file)) ~ ":" ~ $(stringifyMacroParameter(text(line)))}));
+};
+/+ #  ifndef QT_NO_KEYWORDS
 #   define METHOD(a)   qFlagLocation(QT_STRINGIFY_METHOD(a) QLOCATION)
 #  endif
-#  define SLOT(a)     qFlagLocation(QT_STRINGIFY_SLOT(a) QLOCATION)
-#  define SIGNAL(a)   qFlagLocation(QT_STRINGIFY_SIGNAL(a) QLOCATION)
-# else
-#  ifndef QT_NO_KEYWORDS
+#  define SLOT(a)     qFlagLocation(QT_STRINGIFY_SLOT(a) QLOCATION) +/
+extern(D) alias SLOT = function string(string a, string file = __FILE__, size_t line = __LINE__)
+{
+    return     mixin(interpolateMixin(q{dqtimported!q{qt.core.objectdefs}.qFlagLocation("1"~ $(stringifyMacroParameter(a))~ $(dqtimported!q{qt.core.objectdefs}.QLOCATION(file, line)))}));
+};
+/+ #  define SIGNAL(a)   qFlagLocation(QT_STRINGIFY_SIGNAL(a) QLOCATION) +/
+extern(D) alias SIGNAL = function string(string a, string file = __FILE__, size_t line = __LINE__)
+{
+    return   mixin(interpolateMixin(q{dqtimported!q{qt.core.objectdefs}.qFlagLocation("2"~ $(stringifyMacroParameter(a))~ $(dqtimported!q{qt.core.objectdefs}.QLOCATION(file, line)))}));
+};
+}
+version (QT_NO_DEBUG)
+{
+/+ #  ifndef QT_NO_KEYWORDS
 #   define METHOD(a)  QT_STRINGIFY_METHOD(a)
-#  endif +/
-/+ #  define SLOT(a)     QT_STRINGIFY_SLOT(a) +/
+#  endif
+#  define SLOT(a)     QT_STRINGIFY_SLOT(a) +/
 extern(D) alias SLOT = function string(string a)
 {
     return     mixin(interpolateMixin(q{"1"~ $(stringifyMacroParameter(a))}));
@@ -76,8 +93,8 @@ extern(D) alias SIGNAL = function string(string a)
 {
     return   mixin(interpolateMixin(q{"2"~ $(stringifyMacroParameter(a))}));
 };
-/+ # endif
-#endif +/ // QT_NO_META_MACROS
+}
+/+ #endif +/ // QT_NO_META_MACROS
 
 /+ #define Q_ARG(type, data) QArgument<type >(#type, data) +/
 extern(D) alias Q_ARG = function string(string type, string data)

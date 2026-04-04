@@ -774,14 +774,13 @@ extern(C++, "QQmlPrivate")
 
         const(int) index = indexOfOwnClassInfo(metaObject, key);
         return (index == -1) ? defaultValue
-                             : (QByteArray(metaObject.classInfo(index).value()) == staticString!(const(char), "true"));
+                             : (QByteArray(metaObject.classInfo(index).value()) == "true");
     }
 
     pragma(inline, true) const(char)* classElementName(const(QMetaObject)* metaObject)
     {
         import qt.core.bytearrayalgorithms;
-        version (QT_NO_WARNING_OUTPUT) {} else
-            import qt.core.logging;
+        import qt.core.logging;
 
         const(char)* elementName = classInfo(metaObject, "QML.Element");
         if (qstrcmp(elementName, "auto") == 0) {
@@ -797,15 +796,8 @@ extern(C++, "QQmlPrivate")
             return null;
 
         if (!elementName) {
-            static if (!versionIsSet!("QT_NO_WARNING_OUTPUT"))
-            {
-                mixin(qWarning)().nospace() << "Missing QML.Element class info \"" << elementName << "\""
-                                     << " for " << metaObject.className();
-            }
-            else
-            {
-    while(false)QMessageLogger().noDebug().nospace()<<"Missing QML.Element class info \""<<elementName<<"\""<<" for "<<metaObject.className();
-            }
+            mixin(qWarning)().nospace() << "Missing QML.Element class info \"" << elementName << "\""
+                                 << " for " << metaObject.className();
         }
 
         return elementName;
@@ -984,35 +976,20 @@ extern(C++, "QQmlPrivate")
                                          QVector!(int)* qmlTypeIds, const(QMetaObject)* extension,
                                          bool forceAnonymous = false)
     {
+        import qt.core.logging;
         import qt.qml.parserstatus;
         import qt.qml.propertyvaluesource;
-        version (QT_NO_WARNING_OUTPUT) {} else
-            import qt.core.logging;
 
 /+ #if QT_DEPRECATED_SINCE(6, 4) +/
         // ### Qt7: Remove the warnings, and leave only the static asserts below.
         if (!QmlMetaType!(T).hasAcceptableCtors()) {
-            static if (!versionIsSet!("QT_NO_WARNING_OUTPUT"))
-            {
-                mixin(qWarning)() << QMetaType.fromType!(T)().name()
-                           << "is neither a QObject, nor default- and copy-constructible."
-                           << "You should not use it as a QML type.";
-            }
-            else
-            {
-    while(false)QMessageLogger().noDebug()<<QMetaType.fromType!(T)().name()<<"is neither a QObject, nor default- and copy-constructible."<<"You should not use it as a QML type.";
-            }
+            mixin(qWarning)() << QMetaType.fromType!(T)().name()
+                       << "is neither a QObject, nor default- and copy-constructible."
+                       << "You should not use it as a QML type.";
         }
         if (!/+ std:: +/is_base_of_v!(ValueClass!(QObject), T) && QQmlTypeInfo!(T).hasAttachedProperties) {
-            static if (!versionIsSet!("QT_NO_WARNING_OUTPUT"))
-            {
-                mixin(qWarning)() << QMetaType.fromType!(T)().name()
-                           << "is not a QObject, but has attached properties. This won't work.";
-            }
-            else
-            {
-    while(false)QMessageLogger().noDebug()<<QMetaType.fromType!(T)().name()<<"is not a QObject, but has attached properties. This won't work.";
-            }
+            mixin(qWarning)() << QMetaType.fromType!(T)().name()
+                       << "is not a QObject, but has attached properties. This won't work.";
         }
 /+ #else
         static_assert(QmlMetaType<T>::hasAcceptableCtors());

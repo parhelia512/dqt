@@ -175,6 +175,11 @@ public:
         this(f, l - f);
     }
 
+    extern(D) this(Char)(const(Char)[] str) if (if_compatible_char!Char)
+    {
+        this(str.ptr, str.length);
+    }
+
 /+ #ifdef Q_CLANG_QDOC
     template <typename Char, size_t N>
     constexpr QAnyStringView(const Char (&array)[N]) noexcept;

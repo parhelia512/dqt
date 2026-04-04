@@ -720,13 +720,16 @@ public:
 
     void observe(QPropertyObserver* observer) const
     {
-        if (iface)
-            iface.setObserver(data, observer);
-/+ #ifndef QT_NO_DEBUG
-        else
-            QtPrivate::BindableWarnings::printUnsuitableBindableWarning("observe:",
-                                                                        QtPrivate::BindableWarnings::InvalidInterface);
-#endif +/
+        mixin(q{if (iface)
+                iface.setObserver(data, observer);
+    }
+    ~ (!versionIsSet!("QT_NO_DEBUG") ? q{
+    /+ #ifndef QT_NO_DEBUG +/
+            else
+                /+ QtPrivate::BindableWarnings:: +/printUnsuitableBindableWarning(QAnyStringView("observe:"),
+                                                                            /+ QtPrivate::BindableWarnings:: +/Reason.InvalidInterface);
+}:"")
+);/+ #endif +/
     }
 
     /+ template<typename Functor> +/
@@ -755,10 +758,11 @@ public:
     QUntypedPropertyBinding binding() const
     {
         if (!isBindable()) {
-/+ #ifndef QT_NO_DEBUG
-            QtPrivate::BindableWarnings::printUnsuitableBindableWarning("binding: ",
-                                                                        QtPrivate::BindableWarnings::NonBindableInterface);
-#endif +/
+            version (QT_NO_DEBUG) {} else
+            {
+                /+ QtPrivate::BindableWarnings:: +/printUnsuitableBindableWarning(cast(QAnyStringView) ("binding: "),
+                                                                            /+ QtPrivate::BindableWarnings:: +/Reason.NonBindableInterface);
+            }
             return QUntypedPropertyBinding.create();
         }
         return iface.getBinding(data);
@@ -766,17 +770,19 @@ public:
     bool setBinding(ref const(QUntypedPropertyBinding) binding)
     {
         if (isReadOnly()) {
-/+ #ifndef QT_NO_DEBUG
-            const auto errorType = iface ? QtPrivate::BindableWarnings::ReadOnlyInterface :
-                                           QtPrivate::BindableWarnings::InvalidInterface;
-            QtPrivate::BindableWarnings::printUnsuitableBindableWarning("setBinding: Could not set binding via bindable interface.", errorType);
-#endif +/
+            version (QT_NO_DEBUG) {} else
+            {
+                const errorType = iface ? /+ QtPrivate::BindableWarnings:: +/Reason.ReadOnlyInterface :
+                                               /+ QtPrivate::BindableWarnings:: +/Reason.InvalidInterface;
+                /+ QtPrivate::BindableWarnings:: +/printUnsuitableBindableWarning(cast(QAnyStringView) ("setBinding: Could not set binding via bindable interface."), cast(Reason) (errorType));
+            }
             return false;
         }
         if (!binding.isNull() && binding.valueMetaType() != metaType()) {
-/+ #ifndef QT_NO_DEBUG
-            QtPrivate::BindableWarnings::printMetaTypeMismatch(metaType(), binding.valueMetaType());
-#endif +/
+            version (QT_NO_DEBUG) {} else
+            {
+                /+ QtPrivate::BindableWarnings:: +/printMetaTypeMismatch(metaType(), binding.valueMetaType());
+            }
             return false;
         }
         iface.setBinding(data, binding);
@@ -850,12 +856,13 @@ public:
 
         if (iface && iface.setBinding)
             return static_cast!(QPropertyBinding!(T) && /+ && +/)(iface.setBinding(data, binding));
-/+ #ifndef QT_NO_DEBUG
-        if (!iface)
-            QtPrivate::BindableWarnings::printUnsuitableBindableWarning("setBinding", QtPrivate::BindableWarnings::InvalidInterface);
-        else
-            QtPrivate::BindableWarnings::printUnsuitableBindableWarning("setBinding: Could not set binding via bindable interface.", QtPrivate::BindableWarnings::ReadOnlyInterface);
-#endif +/
+        version (QT_NO_DEBUG) {} else
+        {
+            if (!iface)
+                /+ QtPrivate::BindableWarnings:: +/printUnsuitableBindableWarning(cast(QAnyStringView) ("setBinding"), /+ QtPrivate::BindableWarnings:: +/Reason.InvalidInterface);
+            else
+                /+ QtPrivate::BindableWarnings:: +/printUnsuitableBindableWarning(cast(QAnyStringView) ("setBinding: Could not set binding via bindable interface."), /+ QtPrivate::BindableWarnings:: +/Reason.ReadOnlyInterface);
+        }
         return QPropertyBinding!(T)();
     }+/
 /+ #ifndef Q_CLANG_QDOC +/

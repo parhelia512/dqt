@@ -766,20 +766,12 @@ pragma(inline, true) auto qmlRegisterSingletonInstance(T)(const(char)* uri, int 
 
 /+ pragma(inline, true) int qmlRegisterType(ref const(QUrl) url, const(char)* uri, int versionMajor, int versionMinor, const(char)* qmlName)
 {
+    import qt.core.logging;
     import qt.core.versionnumber;
-    version (QT_NO_WARNING_OUTPUT) {} else
-        import qt.core.logging;
 
     if (url.isRelative()) {
         // User input check must go here, because QQmlPrivate::qmlregister is also used internally for composite types
-        static if (!versionIsSet!("QT_NO_WARNING_OUTPUT"))
-        {
-            mixin(qWarning)("qmlRegisterType requires absolute URLs.");
-        }
-        else
-        {
-    while(false)QMessageLogger().noDebug("qmlRegisterType requires absolute URLs.");
-        }
+        mixin(qWarning)("qmlRegisterType requires absolute URLs.");
         return 0;
     }
 
