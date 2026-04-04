@@ -697,7 +697,7 @@ alias mangleOpLess = function string(string name)
 };
 
 package FunctionManglingCpp splitCppMangling(bool isClass, string attributes, string attributes2,
-        string name, string dummyFunctionName, size_t numParameters, string mangling)
+        string name, string dummyFunctionName, size_t numParameters, string variadicStyle, string mangling)
 {
     import std.algorithm, std.exception, std.conv;
 
@@ -756,6 +756,8 @@ package FunctionManglingCpp splitCppMangling(bool isClass, string attributes, st
             {
                 static if (size_t.sizeof == 8)
                     parsed.flags ~= "EBA";
+                else if (variadicStyle != "none")
+                    parsed.flags ~= "BA";
                 else
                     parsed.flags ~= "BE";
             }
@@ -763,6 +765,8 @@ package FunctionManglingCpp splitCppMangling(bool isClass, string attributes, st
             {
                 static if (size_t.sizeof == 8)
                     parsed.flags ~= "EAA";
+                else if (variadicStyle != "none")
+                    parsed.flags ~= "AA";
                 else
                     parsed.flags ~= "AE";
             }
@@ -1103,6 +1107,7 @@ package string changeCppMangling(bool debugHere = false)(string changeFuncs,
     codeSplitMangling ~= "q{" ~ name ~ "}, ";
     codeSplitMangling ~= "q{" ~ dummyFunctionName ~ "}, ";
     codeSplitMangling ~= "qt.helpers.FunctionParameters!" ~ dummyFunctionName ~ ".length, ";
+    codeSplitMangling ~= "__traits(getFunctionVariadicStyle, " ~ dummyFunctionName ~ "), ";
     codeSplitMangling ~= dummyFunctionName ~ ".mangleof";
     codeSplitMangling ~= ")";
     if (debugHere)

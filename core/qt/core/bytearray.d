@@ -661,7 +661,7 @@ public:
         using namespace /+ QtPrivate:: +/DeprecatedRefClassBehavior;
         if (/+ Q_LIKELY +/(i < a.d.size))
             return a.d.data()[i];
-        version (QT_DEBUG)
+        version (QT_NO_DEBUG) {} else
         {
             warn(WarningType.OutOfRange, EmittingClass.QByteRef);
         }
@@ -671,13 +671,13 @@ public:
     {
         using namespace /+ QtPrivate:: +/DeprecatedRefClassBehavior;
         if (/+ Q_UNLIKELY +/(i >= a.d.size)) {
-            version (QT_DEBUG)
+            version (QT_NO_DEBUG) {} else
             {
                 warn(WarningType.OutOfRange, EmittingClass.QByteRef);
             }
             a.expand(i);
         } else {
-            version (QT_DEBUG)
+            version (QT_NO_DEBUG) {} else
             {
                 if (/+ Q_UNLIKELY +/(!a.isDetached()))
                     warn(WarningType.DelayedDetach, EmittingClass.QByteRef);

@@ -1412,7 +1412,7 @@ public:
         //using namespace /+ QtPrivate:: +/DeprecatedRefClassBehavior;
         if (/+ Q_LIKELY +/(i < s.d.size))
             return QChar(s.d.data()[i]);
-        version (QT_DEBUG)
+        version (QT_NO_DEBUG) {} else
         {
 //            warn(WarningType.OutOfRange, EmittingClass.QCharRef);
         }
@@ -1422,13 +1422,13 @@ public:
     {
         using namespace /+ QtPrivate:: +/DeprecatedRefClassBehavior;
         if (/+ Q_UNLIKELY +/(i >= s.d.size)) {
-            version (QT_DEBUG)
+            version (QT_NO_DEBUG) {} else
             {
                 warn(WarningType.OutOfRange, EmittingClass.QCharRef);
             }
             s.resize(i + 1, QLatin1Char(' '));
         } else {
-            version (QT_DEBUG)
+            version (QT_NO_DEBUG) {} else
             {
                 if (/+ Q_UNLIKELY +/(!s.isDetached()))
                     warn(WarningType.DelayedDetach, EmittingClass.QCharRef);

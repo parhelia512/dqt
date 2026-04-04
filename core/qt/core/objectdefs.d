@@ -48,14 +48,30 @@ version (QT_NO_TRANSLATION) {} else
 /+ Q_CORE_EXPORT +/ const(char)* qFlagLocation(const(char)* method);
 
 /+ #ifndef QT_NO_META_MACROS +/
-/+ #ifndef QT_NO_DEBUG
-# define QLOCATION "\0" __FILE__ ":" QT_STRINGIFY(__LINE__)
-# ifndef QT_NO_KEYWORDS
+version (QT_NO_DEBUG) {} else
+{
+/+ # define QLOCATION "\0" __FILE__ ":" QT_STRINGIFY(__LINE__) +/
+extern(D) alias QLOCATION = function string(string file = __FILE__, size_t line = __LINE__)
+{
+    import std.conv : text;
+    return mixin(interpolateMixin(q{"\0" ~ $(stringifyMacroParameter(file)) ~ ":" ~ $(stringifyMacroParameter(text(line)))}));
+};
+/+ # ifndef QT_NO_KEYWORDS
 #  define METHOD(a)   qFlagLocation("0"#a QLOCATION)
-# endif
-# define SLOT(a)     qFlagLocation("1"#a QLOCATION)
-# define SIGNAL(a)   qFlagLocation("2"#a QLOCATION)
-#else +/
+# endif +/
+/+ # define SLOT(a)     qFlagLocation("1"#a QLOCATION) +/
+extern(D) alias SLOT = function string(string a, string file = __FILE__, size_t line = __LINE__)
+{
+    return     mixin(interpolateMixin(q{dqtimported!q{qt.core.objectdefs}.qFlagLocation("1"~ $(stringifyMacroParameter(a))~ $(dqtimported!q{qt.core.objectdefs}.QLOCATION(file, line)))}));
+};
+/+ # define SIGNAL(a)   qFlagLocation("2"#a QLOCATION) +/
+extern(D) alias SIGNAL = function string(string a, string file = __FILE__, size_t line = __LINE__)
+{
+    return   mixin(interpolateMixin(q{dqtimported!q{qt.core.objectdefs}.qFlagLocation("2"~ $(stringifyMacroParameter(a))~ $(dqtimported!q{qt.core.objectdefs}.QLOCATION(file, line)))}));
+};
+}
+version (QT_NO_DEBUG)
+{
 /+ # ifndef QT_NO_KEYWORDS
 #  define METHOD(a)   "0"#a
 # endif +/
@@ -69,11 +85,12 @@ extern(D) alias SIGNAL = function string(string a)
 {
     return   mixin(interpolateMixin(q{"2"~ $(stringifyMacroParameter(a))}));
 };
-/+ #endif
+}
 
-#define QMETHOD_CODE  0                        // member type codes
-#define QSLOT_CODE    1
-#define QSIGNAL_CODE  2 +/
+/+ #define QMETHOD_CODE  0                        // member type codes
+#define QSLOT_CODE    1 +/
+/+ #define QSIGNAL_CODE  2 +/
+enum QSIGNAL_CODE =  2;
 /+ #endif +/ // QT_NO_META_MACROS
 
 /+ #define Q_ARG(type, data) QArgument<type >(#type, data) +/

@@ -175,7 +175,7 @@ public:
     QDynamicMetaObjectData* metaObject;
     final QMetaObject* dynamicMetaObject() const;
 
-    version (QT_DEBUG)
+    version (QT_NO_DEBUG) {} else
     {
         enum { CheckForParentChildLoopsWarnDepth = 4096 }
     }

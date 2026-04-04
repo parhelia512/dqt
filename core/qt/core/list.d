@@ -338,12 +338,18 @@ public:
     }
     pragma(inline, true) void insert()(int i, ref const(T) t)
     {
+        version (QT_NO_DEBUG) {} else
+            import qt.core.logging;
+
     /+ #if !QT_DEPRECATED_SINCE(5, 15)
         Q_ASSERT_X(i >= 0 && i <= p.size(), "QList<T>::insert", "index out of range");
-    #elif !defined(QT_NO_DEBUG)
-        if (i < 0 || i > p.size())
-            qWarning("QList::insert(): Index out of range.");
-    #endif +/
+    #elif !defined(QT_NO_DEBUG) +/
+        version (QT_NO_DEBUG) {} else
+        {
+                if (i < 0 || i > p.size())
+                mixin(qWarning)("QList::insert(): Index out of range.");
+        }
+    /+ #endif +/
         if (d.ref_.isShared()) {
             Node* n = detach_helper_grow(i, 1);
             /+ QT_TRY +/ {
@@ -382,13 +388,17 @@ public:
     }
     pragma(inline, true) void removeAt(int i)
     {
+        version (QT_NO_DEBUG) {} else
+            import qt.core.logging;
+
     /+ #if !QT_DEPRECATED_SINCE(5, 15) +/
         (mixin(Q_ASSERT_X(q{i >= 0 && i < p.size()}, q{"QList<T>::removeAt"}, q{"index out of range"})));
     /+ #endif +/
         if (i < 0 || i >= p.size()) {
-    /+ #if !defined(QT_NO_DEBUG)
-            qWarning("QList::removeAt(): Index out of range.");
-    #endif +/
+            version (QT_NO_DEBUG) {} else
+            {
+                mixin(qWarning)("QList::removeAt(): Index out of range.");
+            }
             return;
         }
         detach();

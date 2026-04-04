@@ -496,8 +496,7 @@ extern(C++, "QQmlPrivate")
     pragma(inline, true) const(char)* classElementName(const(QMetaObject)* metaObject)
     {
         import qt.core.bytearray;
-        version (QT_NO_WARNING_OUTPUT) {} else
-            import qt.core.logging;
+        import qt.core.logging;
 
         const(char)* elementName = classInfo(metaObject, "QML.Element");
         if (qstrcmp(elementName, "auto") == 0)
@@ -506,15 +505,8 @@ extern(C++, "QQmlPrivate")
             return null;
 
         if (!elementName || elementName[0] < 'A' || elementName[0] > 'Z') {
-            static if (!versionIsSet!("QT_NO_WARNING_OUTPUT"))
-            {
-                mixin(qWarning)() << "Missing or unusable QML.Element class info \"" << elementName << "\""
-                           << "for" << metaObject.className();
-            }
-            else
-            {
-    while(false)QMessageLogger().noDebug()<<"Missing or unusable QML.Element class info \""<<elementName<<"\""<<"for"<<metaObject.className();
-            }
+            mixin(qWarning)() << "Missing or unusable QML.Element class info \"" << elementName << "\""
+                       << "for" << metaObject.className();
         }
 
         return elementName;

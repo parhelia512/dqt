@@ -5,6 +5,7 @@ import qt.config;
 import qt.core.coreapplication;
 import qt.core.flags;
 import qt.core.list;
+import qt.core.logging;
 import qt.core.metatype;
 import qt.core.namespace;
 import qt.core.object;
@@ -757,19 +758,19 @@ void connectByString(TestObject a, TestObject b)
     import qt.core.object;
     import qt.core.objectdefs;
 
-    QObject.connect(a, (mixin(SIGNAL(q{signalVoid()}))).ptr, b, (mixin(SLOT(q{onSignalVoid()}))).ptr);
-    QObject.connect(a, (mixin(SIGNAL(q{signalInt(int)}))).ptr, b, (mixin(SLOT(q{onSignalInt(int)}))).ptr);
-    QObject.connect(a, (mixin(SIGNAL(q{signalInt3(int, int, int)}))).ptr, b, (mixin(SLOT(q{onSignalInt3(int, int, int)}))).ptr);
-    QObject.connect(a, (mixin(SIGNAL(q{signalDouble(double)}))).ptr, b, (mixin(SLOT(q{onSignalDouble(double)}))).ptr);
-    QObject.connect(a, (mixin(SIGNAL(q{signalString(const QString &)}))).ptr, b, (mixin(SLOT(q{onSignalString(const QString &)}))).ptr);
-    QObject.connect(a, (mixin(SIGNAL(q{signalListInt(const QList<int> &)}))).ptr, b, (mixin(SLOT(q{onSignalListInt(const QList<int> &)}))).ptr);
-    QObject.connect(a, (mixin(SIGNAL(q{signalVectorInt(const QVector<int> &)}))).ptr, b, (mixin(SLOT(q{onSignalVectorInt(const QVector<int> &)}))).ptr);
-    QObject.connect(a, (mixin(SIGNAL(q{signalPointerInt(int *)}))).ptr, b, (mixin(SLOT(q{onSignalPointerInt(int *)}))).ptr);
-    QObject.connect(a, (mixin(SIGNAL(q{signalObjects(QObject*,TestObject*)}))).ptr, b, (mixin(SLOT(q{onSignalObjects(QObject*,TestObject*)}))).ptr);
-    QObject.connect(a, (mixin(SIGNAL(q{signalCustomStruct1(CustomStruct1)}))).ptr, b, (mixin(SLOT(q{onSignalCustomStruct1(CustomStruct1)}))).ptr);
-    QObject.connect(a, (mixin(SIGNAL(q{signalCustomStruct1ConstRef(CustomStruct1)}))).ptr, b, (mixin(SLOT(q{onSignalCustomStruct1ConstRef(CustomStruct1)}))).ptr);
-    QObject.connect(a, (mixin(SIGNAL(q{signalCustomEnum(CustomEnum)}))).ptr, b, (mixin(SLOT(q{onSignalCustomEnum(CustomEnum)}))).ptr);
-    QObject.connect(a, (mixin(SIGNAL(q{signalCustomFlags(CustomFlags)}))).ptr, b, (mixin(SLOT(q{onSignalCustomFlags(CustomFlags)}))).ptr);
+    QObject.connect(a, mixin(SIGNAL(q{signalVoid()})), b, mixin(SLOT(q{onSignalVoid()})));
+    QObject.connect(a, mixin(SIGNAL(q{signalInt(int)})), b, mixin(SLOT(q{onSignalInt(int)})));
+    QObject.connect(a, mixin(SIGNAL(q{signalInt3(int, int, int)})), b, mixin(SLOT(q{onSignalInt3(int, int, int)})));
+    QObject.connect(a, mixin(SIGNAL(q{signalDouble(double)})), b, mixin(SLOT(q{onSignalDouble(double)})));
+    QObject.connect(a, mixin(SIGNAL(q{signalString(const QString &)})), b, mixin(SLOT(q{onSignalString(const QString &)})));
+    QObject.connect(a, mixin(SIGNAL(q{signalListInt(const QList<int> &)})), b, mixin(SLOT(q{onSignalListInt(const QList<int> &)})));
+    QObject.connect(a, mixin(SIGNAL(q{signalVectorInt(const QVector<int> &)})), b, mixin(SLOT(q{onSignalVectorInt(const QVector<int> &)})));
+    QObject.connect(a, mixin(SIGNAL(q{signalPointerInt(int *)})), b, mixin(SLOT(q{onSignalPointerInt(int *)})));
+    QObject.connect(a, mixin(SIGNAL(q{signalObjects(QObject*,TestObject*)})), b, mixin(SLOT(q{onSignalObjects(QObject*,TestObject*)})));
+    QObject.connect(a, mixin(SIGNAL(q{signalCustomStruct1(CustomStruct1)})), b, mixin(SLOT(q{onSignalCustomStruct1(CustomStruct1)})));
+    QObject.connect(a, mixin(SIGNAL(q{signalCustomStruct1ConstRef(CustomStruct1)})), b, mixin(SLOT(q{onSignalCustomStruct1ConstRef(CustomStruct1)})));
+    QObject.connect(a, mixin(SIGNAL(q{signalCustomEnum(CustomEnum)})), b, mixin(SLOT(q{onSignalCustomEnum(CustomEnum)})));
+    QObject.connect(a, mixin(SIGNAL(q{signalCustomFlags(CustomFlags)})), b, mixin(SLOT(q{onSignalCustomFlags(CustomFlags)})));
 }
 
 void connectByPointer(TestObject a, TestObject b, /+ Qt:: +/qt.core.namespace.ConnectionType type = /+ Qt:: +/qt.core.namespace.ConnectionType.AutoConnection)
@@ -1398,4 +1399,65 @@ unittest
 
     cpp_delete(eventLoop);
     cpp_delete(test);
+}
+
+QtMsgType lastMsgType;
+const(char)* lastMsgFile;
+int lastMsgLine;
+wstring lastMsg;
+extern(C++) void testMessageHandler(QtMsgType type, ref const(QMessageLogContext) context, ref const(QString) msg)
+{
+    lastMsgType = type;
+    lastMsgFile = context.file;
+    lastMsgLine = context.line;
+    lastMsg = msg.toConstWString.idup;
+}
+
+unittest
+{
+    auto prevHandler = qInstallMessageHandler(&testMessageHandler);
+    scope(exit)
+        qInstallMessageHandler(prevHandler);
+
+    mixin(qDebug)("test1");
+    assert(lastMsgType == QtMsgType.QtDebugMsg);
+    assert(lastMsg == "test1");
+    assert(lastMsgFile.fromStringz == text(__FILE__, "-mixin-", __LINE__ - 3));
+    assert(lastMsgLine == __LINE__ - 4);
+
+    mixin(qCritical)("test2");
+    assert(lastMsgType == QtMsgType.QtCriticalMsg);
+    assert(lastMsg == "test2");
+    assert(lastMsgFile.fromStringz == text(__FILE__, "-mixin-", __LINE__ - 3));
+    assert(lastMsgLine == __LINE__ - 4);
+
+    mixin(qInfo)("test3");
+    assert(lastMsgType == QtMsgType.QtInfoMsg);
+    assert(lastMsg == "test3");
+    assert(lastMsgFile.fromStringz == text(__FILE__, "-mixin-", __LINE__ - 3));
+    assert(lastMsgLine == __LINE__ - 4);
+
+    mixin(qWarning)("test4");
+    assert(lastMsgType == QtMsgType.QtWarningMsg);
+    assert(lastMsg == "test4");
+    assert(lastMsgFile.fromStringz == text(__FILE__, "-mixin-", __LINE__ - 3));
+    assert(lastMsgLine == __LINE__ - 4);
+
+    if (false)
+        mixin(qFatal)("test5");
+}
+
+unittest
+{
+    import qt.core.objectdefs;
+
+    auto prevHandler = qInstallMessageHandler(&testMessageHandler);
+    scope(exit)
+        qInstallMessageHandler(prevHandler);
+
+    scope test = new TestObject(null);
+    QObject.connect(test, mixin(SIGNAL(q{signalInt(int)})), test, mixin(SLOT(q{missingSlot(int)})));
+    assert(lastMsg == wtext("QObject::connect: No such slot TestObject::missingSlot(int) in ", __FILE__, ":", __LINE__ - 1));
+    QObject.connect(test, mixin(SIGNAL(q{missingSignal(int)})), test, mixin(SLOT(q{onSignalInt(int)})));
+    assert(lastMsg == wtext("QObject::connect: No such signal TestObject::missingSignal(int) in ", __FILE__, ":", __LINE__ - 1));
 }
